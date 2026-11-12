@@ -1,0 +1,1087 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd http://www.omg.org/spec/DD/20100524/DC DC.xsd http://www.omg.org/spec/DD/20100524/DI DI.xsd " id="_IH_DAB_TANZIM_FC_DAB_TANZIM_GIRIS" exporter="jBPM Process Modeler" exporterVersion="2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:itemDefinition id="_exportAllItem" structureRef="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll"/>
+  <bpmn2:itemDefinition id="_StringItem" structureRef="String"/>
+  <bpmn2:process id="IH_DAB_TANZIM_FC.DAB_TANZIM_GIRIS" drools:packageName="com.garantibbva.processarchitecture.ihdabtanzimfc" drools:version="1.0" drools:adHoc="false" name="DAB Tanzim Giris" isExecutable="true" processType="Public">
+    <bpmn2:documentation><![CDATA[Avrasya 'DAB Tanzim Giris' blogu: portfoy belirleme, giris, yetkili 2. onay, onay tablosu, World Check ve Fircosoft.]]></bpmn2:documentation>
+    <bpmn2:extensionElements>
+      <drools:import name="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll"/>
+      <drools:import name="com.garantibbva.processarchitecture.ihdabtanzimfc.surec.Surec"/>
+    </bpmn2:extensionElements>
+    <bpmn2:property id="exportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+    <bpmn2:property id="serviceError" itemSubjectRef="_StringItem" name="serviceError"/>
+    <bpmn2:property id="uAction" itemSubjectRef="_StringItem" name="uAction"/>
+    <bpmn2:property id="uRework" itemSubjectRef="_StringItem" name="uRework"/>
+    <bpmn2:property id="uKuyrukAdi" itemSubjectRef="_StringItem" name="uKuyrukAdi"/>
+    <bpmn2:property id="uReturnCode" itemSubjectRef="_StringItem" name="uReturnCode"/>
+    <bpmn2:property id="uHataKarar" itemSubjectRef="_StringItem" name="uHataKarar"/>
+    <bpmn2:startEvent id="Start" name="Start">
+      <bpmn2:outgoing>F36_Start_PortfoyDongu</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:exclusiveGateway id="PortfoyDongu" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F36_Start_PortfoyDongu</bpmn2:incoming>
+      <bpmn2:incoming>F39_PortfoyKontrol_PortfoyDongu</bpmn2:incoming>
+      <bpmn2:outgoing>F37_PortfoyDongu_PortfoyBelirleme1</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="PortfoyBelirleme1" name="Portfoy Belirleme1">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Portfoy Belirleme1]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+e.getPro().setStatusCode("");
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F37_PortfoyDongu_PortfoyBelirleme1</bpmn2:incoming>
+      <bpmn2:outgoing>F38_PortfoyBelirleme1_PortfoyKontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="PortfoyBelirleme1_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="PortfoyBelirleme1_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="PortfoyBelirleme1_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="PortfoyBelirleme1_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="PortfoyBelirleme1_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="PortfoyBelirleme1_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="PortfoyBelirleme1_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="PortfoyBelirleme1_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="PortfoyBelirleme1_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="PortfoyBelirleme1_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>PortfoyBelirleme1_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>PortfoyBelirleme1_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>PortfoyBelirleme1_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>PortfoyBelirleme1_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>PortfoyBelirleme1_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>PortfoyBelirleme1_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>PortfoyBelirleme1_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>PortfoyBelirleme1_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>PortfoyBelirleme1_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>PortfoyBelirleme1_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>PortfoyBelirleme1_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[PortfoyBelirleme]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[PortfoyBelirleme1_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>PortfoyBelirleme1_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Portfoy Belirleme1]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[PortfoyBelirleme1_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>PortfoyBelirleme1_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_587]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[PortfoyBelirleme1_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>PortfoyBelirleme1_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[PortfoyBelirleme1_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>PortfoyBelirleme1_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Portfoy / kuyruk belirleme (WorkQueue 587)]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[PortfoyBelirleme1_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>PortfoyBelirleme1_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>PortfoyBelirleme1_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>PortfoyBelirleme1_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>PortfoyBelirleme1_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>PortfoyBelirleme1_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="PortfoyKontrol" name="Portfoy" gatewayDirection="Diverging" default="F41_PortfoyKontrol_GirisDongu">
+      <bpmn2:incoming>F38_PortfoyBelirleme1_PortfoyKontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F39_PortfoyKontrol_PortfoyDongu</bpmn2:outgoing>
+      <bpmn2:outgoing>F40_PortfoyKontrol_ErtesiGunDongu</bpmn2:outgoing>
+      <bpmn2:outgoing>F41_PortfoyKontrol_GirisDongu</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="ErtesiGunDongu" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F40_PortfoyKontrol_ErtesiGunDongu</bpmn2:incoming>
+      <bpmn2:incoming>F45_ErtesiGunKontrol_ErtesiGunDongu</bpmn2:incoming>
+      <bpmn2:outgoing>F42_ErtesiGunDongu_ErtesiGun</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="ErtesiGun" name="ErtesiGun">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[ErtesiGun]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F42_ErtesiGunDongu_ErtesiGun</bpmn2:incoming>
+      <bpmn2:outgoing>F43_ErtesiGun_ErtesiGunKontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="ErtesiGun_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="ErtesiGun_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="ErtesiGun_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="ErtesiGun_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="ErtesiGun_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="ErtesiGun_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="ErtesiGun_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="ErtesiGun_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="ErtesiGun_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="ErtesiGun_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>ErtesiGun_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ErtesiGun_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ErtesiGun_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ErtesiGun_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ErtesiGun_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ErtesiGun_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>ErtesiGun_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>ErtesiGun_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>ErtesiGun_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>ErtesiGun_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ErtesiGun_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[ErtesiGun]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ErtesiGun_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ErtesiGun_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[ErtesiGun]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ErtesiGun_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ErtesiGun_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[#{exportAll.que.qKuyrukAdi}]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ErtesiGun_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ErtesiGun_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ErtesiGun_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ErtesiGun_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Ertesi gun islenecek]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ErtesiGun_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>ErtesiGun_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>ErtesiGun_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>ErtesiGun_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>ErtesiGun_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>ErtesiGun_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="ErtesiGunKontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F45_ErtesiGunKontrol_ErtesiGunDongu">
+      <bpmn2:incoming>F43_ErtesiGun_ErtesiGunKontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F44_ErtesiGunKontrol_GirisDongu</bpmn2:outgoing>
+      <bpmn2:outgoing>F45_ErtesiGunKontrol_ErtesiGunDongu</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="GirisDongu" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F41_PortfoyKontrol_GirisDongu</bpmn2:incoming>
+      <bpmn2:incoming>F44_ErtesiGunKontrol_GirisDongu</bpmn2:incoming>
+      <bpmn2:incoming>F48_GirisKontrol_GirisDongu</bpmn2:incoming>
+      <bpmn2:outgoing>F46_GirisDongu_DabTanzimGiris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="DabTanzimGiris" name="DAB Tanzim Giris">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[DAB Tanzim Giris]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+e.getPro().setApprovalCode("G");
+e.getPro().setDisableFlag("");
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F46_GirisDongu_DabTanzimGiris</bpmn2:incoming>
+      <bpmn2:outgoing>F47_DabTanzimGiris_GirisKontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="DabTanzimGiris_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="DabTanzimGiris_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="DabTanzimGiris_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="DabTanzimGiris_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="DabTanzimGiris_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="DabTanzimGiris_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="DabTanzimGiris_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="DabTanzimGiris_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="DabTanzimGiris_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="DabTanzimGiris_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>DabTanzimGiris_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DabTanzimGiris_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DabTanzimGiris_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DabTanzimGiris_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DabTanzimGiris_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DabTanzimGiris_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>DabTanzimGiris_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>DabTanzimGiris_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>DabTanzimGiris_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>DabTanzimGiris_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>DabTanzimGiris_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[DabTanzimGiris]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DabTanzimGiris_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>DabTanzimGiris_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[DAB Tanzim Giris]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DabTanzimGiris_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>DabTanzimGiris_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[#{exportAll.que.qKuyrukAdi}]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DabTanzimGiris_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>DabTanzimGiris_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DabTanzimGiris_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>DabTanzimGiris_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[DAB Tanzim Giris (ProgramID 116081)]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DabTanzimGiris_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>DabTanzimGiris_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>DabTanzimGiris_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>DabTanzimGiris_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>DabTanzimGiris_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>DabTanzimGiris_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="GirisKontrol" name="Karar" gatewayDirection="Diverging" default="F50_GirisKontrol_Ony1Onay_Giris">
+      <bpmn2:incoming>F47_DabTanzimGiris_GirisKontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F48_GirisKontrol_GirisDongu</bpmn2:outgoing>
+      <bpmn2:outgoing>F49_GirisKontrol_GirisCikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F50_GirisKontrol_Ony1Onay_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:scriptTask id="GirisCikis" name="Iade / Iptal Isaretle" scriptFormat="http://www.java.com/java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade / Iptal Isaretle]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F49_GirisKontrol_GirisCikis</bpmn2:incoming>
+      <bpmn2:outgoing>F51_GirisCikis_EndGirisCikis</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.cikisIsaretle(e, kcontext);]]></bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:endEvent id="EndGirisCikis" name="Iade / Iptal">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade / Iptal]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F51_GirisCikis_EndGirisCikis</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:exclusiveGateway id="Ony1Onay_Giris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F7_Ony1Onay_HataKarar_Ony1Onay_Giris</bpmn2:incoming>
+      <bpmn2:incoming>F50_GirisKontrol_Ony1Onay_Giris</bpmn2:incoming>
+      <bpmn2:outgoing>F1_Ony1Onay_Giris_Ony1Onay</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="Ony1Onay" drools:taskName="AvrasyaService" name="ONY_1_ONAY">
+      <bpmn2:documentation><![CDATA[Onay Tablosu giris. Avrasya ActivityIndex 144306655, ProgramID 116092. HIST_APPROVAL = O1.]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[ONY_1_ONAY]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.servisOncesi(e);
+e.getPro().setHistApproval("O1");
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F1_Ony1Onay_Giris_Ony1Onay</bpmn2:incoming>
+      <bpmn2:outgoing>F2_Ony1Onay_Ony1Onay_Kontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Ony1Onay_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Ony1Onay_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="Ony1Onay_ActivityNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ActivityName"/>
+        <bpmn2:dataInput id="Ony1Onay_DataInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="Ony1Onay_DataOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="Ony1Onay_ServiceErrorOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Ony1Onay_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_ActivityNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_DataInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Ony1Onay_DataOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Ony1Onay_ServiceErrorOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[AvrasyaService]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116092]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_ActivityNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[ONY_1_ONAY]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_ActivityNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Ony1Onay_DataInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Ony1Onay_DataOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Ony1Onay_ServiceErrorOutputX</bpmn2:sourceRef><bpmn2:targetRef>serviceError</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="Ony1Onay_Kontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F4_Ony1Onay_Kontrol_Ony1Onay_Hata">
+      <bpmn2:incoming>F2_Ony1Onay_Ony1Onay_Kontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F3_Ony1Onay_Kontrol_Ony1Onay_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F4_Ony1Onay_Kontrol_Ony1Onay_Hata</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="Ony1Onay_Hata" name="ONY_1_ONAY - Hata Kuyrugu">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[ONY_1_ONAY - Hata Kuyrugu]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[kcontext.setVariable("uHataKarar", null);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F4_Ony1Onay_Kontrol_Ony1Onay_Hata</bpmn2:incoming>
+      <bpmn2:outgoing>F5_Ony1Onay_Hata_Ony1Onay_HataKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Ony1Onay_Hata_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Ony1Onay_Hata_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="Ony1Onay_Hata_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="Ony1Onay_Hata_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="Ony1Onay_Hata_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="Ony1Onay_Hata_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="Ony1Onay_Hata_ServiceErrorInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:dataInput id="Ony1Onay_Hata_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="Ony1Onay_Hata_kararOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="karar"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Ony1Onay_Hata_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_Hata_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_Hata_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_Hata_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_Hata_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_Hata_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_Hata_ServiceErrorInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony1Onay_Hata_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Ony1Onay_Hata_kararOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_Hata_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[HataKuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_Hata_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_Hata_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[ONY_1_ONAY - Hata Kuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_Hata_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_Hata_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_585]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_Hata_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_Hata_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_Hata_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_Hata_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Otomatik aktivite bitis kosulu saglanamadi: ONY_1_ONAY]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_Hata_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony1Onay_Hata_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116092]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony1Onay_Hata_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>serviceError</bpmn2:sourceRef><bpmn2:targetRef>Ony1Onay_Hata_ServiceErrorInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Ony1Onay_Hata_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Ony1Onay_Hata_kararOutputX</bpmn2:sourceRef><bpmn2:targetRef>uHataKarar</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="Ony1Onay_HataKarar" name="Karar" gatewayDirection="Diverging" default="F7_Ony1Onay_HataKarar_Ony1Onay_Giris">
+      <bpmn2:incoming>F5_Ony1Onay_Hata_Ony1Onay_HataKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F6_Ony1Onay_HataKarar_Ony1Onay_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F7_Ony1Onay_HataKarar_Ony1Onay_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="Ony1Onay_Cikis" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F3_Ony1Onay_Kontrol_Ony1Onay_Cikis</bpmn2:incoming>
+      <bpmn2:incoming>F6_Ony1Onay_HataKarar_Ony1Onay_Cikis</bpmn2:incoming>
+      <bpmn2:outgoing>F52_Ony1Onay_Cikis_YetkiliDongu</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="YetkiliDongu" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F52_Ony1Onay_Cikis_YetkiliDongu</bpmn2:incoming>
+      <bpmn2:incoming>F55_YetkiliKontrol_YetkiliDongu</bpmn2:incoming>
+      <bpmn2:outgoing>F53_YetkiliDongu_Yetkili2Onay</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="Yetkili2Onay" name="DAB Tanzim Yetkili 2.Onay">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[DAB Tanzim Yetkili 2.Onay]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+e.getQue().setQKuyrukAdi(Surec.birlestir(e.getQue().getQPortfoyAdi(), e.getQue().getQYetkiliOnay()));
+e.getPro().setDisableFlag("Y");
+e.getPro().setApprovalCode("2");
+e.getPro().setStatusCode("K");
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F53_YetkiliDongu_Yetkili2Onay</bpmn2:incoming>
+      <bpmn2:outgoing>F54_Yetkili2Onay_YetkiliKontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Yetkili2Onay_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Yetkili2Onay_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="Yetkili2Onay_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="Yetkili2Onay_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="Yetkili2Onay_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="Yetkili2Onay_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="Yetkili2Onay_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="Yetkili2Onay_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="Yetkili2Onay_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="Yetkili2Onay_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Yetkili2Onay_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Yetkili2Onay_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Yetkili2Onay_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Yetkili2Onay_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Yetkili2Onay_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Yetkili2Onay_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Yetkili2Onay_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Yetkili2Onay_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Yetkili2Onay_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Yetkili2Onay_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Yetkili2Onay_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[DabTanzimYetkiliOnay]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Yetkili2Onay_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Yetkili2Onay_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[DAB Tanzim Yetkili 2.Onay]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Yetkili2Onay_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Yetkili2Onay_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[#{exportAll.que.qKuyrukAdi}]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Yetkili2Onay_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Yetkili2Onay_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Yetkili2Onay_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Yetkili2Onay_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[DAB Tanzim Yetkili 2.Onay (ProgramID 116081)]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Yetkili2Onay_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Yetkili2Onay_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Yetkili2Onay_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Yetkili2Onay_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Yetkili2Onay_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Yetkili2Onay_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="YetkiliKontrol" name="Karar" gatewayDirection="Diverging" default="F57_YetkiliKontrol_Ony2Onay_Giris">
+      <bpmn2:incoming>F54_Yetkili2Onay_YetkiliKontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F55_YetkiliKontrol_YetkiliDongu</bpmn2:outgoing>
+      <bpmn2:outgoing>F56_YetkiliKontrol_YetkiliCikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F57_YetkiliKontrol_Ony2Onay_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:scriptTask id="YetkiliCikis" name="Iade / Iptal Isaretle" scriptFormat="http://www.java.com/java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade / Iptal Isaretle]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F56_YetkiliKontrol_YetkiliCikis</bpmn2:incoming>
+      <bpmn2:outgoing>F58_YetkiliCikis_EndYetkiliCikis</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.cikisIsaretle(e, kcontext);]]></bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:endEvent id="EndYetkiliCikis" name="Iade / Iptal">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade / Iptal]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F58_YetkiliCikis_EndYetkiliCikis</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:exclusiveGateway id="Ony2Onay_Giris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F14_Ony2Onay_HataKarar_Ony2Onay_Giris</bpmn2:incoming>
+      <bpmn2:incoming>F57_YetkiliKontrol_Ony2Onay_Giris</bpmn2:incoming>
+      <bpmn2:outgoing>F8_Ony2Onay_Giris_Ony2Onay</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="Ony2Onay" drools:taskName="AvrasyaService" name="ONY_2_ONAY">
+      <bpmn2:documentation><![CDATA[Onay Tablosu giris. Avrasya ActivityIndex 144440124, ProgramID 116092. HIST_APPROVAL = O2.]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[ONY_2_ONAY]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.servisOncesi(e);
+e.getPro().setHistApproval("O2");
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F8_Ony2Onay_Giris_Ony2Onay</bpmn2:incoming>
+      <bpmn2:outgoing>F9_Ony2Onay_Ony2Onay_Kontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Ony2Onay_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Ony2Onay_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="Ony2Onay_ActivityNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ActivityName"/>
+        <bpmn2:dataInput id="Ony2Onay_DataInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="Ony2Onay_DataOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="Ony2Onay_ServiceErrorOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Ony2Onay_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_ActivityNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_DataInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Ony2Onay_DataOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Ony2Onay_ServiceErrorOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[AvrasyaService]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116092]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_ActivityNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[ONY_2_ONAY]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_ActivityNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Ony2Onay_DataInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Ony2Onay_DataOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Ony2Onay_ServiceErrorOutputX</bpmn2:sourceRef><bpmn2:targetRef>serviceError</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="Ony2Onay_Kontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F11_Ony2Onay_Kontrol_Ony2Onay_Hata">
+      <bpmn2:incoming>F9_Ony2Onay_Ony2Onay_Kontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F10_Ony2Onay_Kontrol_Ony2Onay_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F11_Ony2Onay_Kontrol_Ony2Onay_Hata</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="Ony2Onay_Hata" name="ONY_2_ONAY - Hata Kuyrugu">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[ONY_2_ONAY - Hata Kuyrugu]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[kcontext.setVariable("uHataKarar", null);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F11_Ony2Onay_Kontrol_Ony2Onay_Hata</bpmn2:incoming>
+      <bpmn2:outgoing>F12_Ony2Onay_Hata_Ony2Onay_HataKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Ony2Onay_Hata_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Ony2Onay_Hata_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="Ony2Onay_Hata_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="Ony2Onay_Hata_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="Ony2Onay_Hata_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="Ony2Onay_Hata_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="Ony2Onay_Hata_ServiceErrorInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:dataInput id="Ony2Onay_Hata_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="Ony2Onay_Hata_kararOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="karar"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Ony2Onay_Hata_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_Hata_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_Hata_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_Hata_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_Hata_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_Hata_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_Hata_ServiceErrorInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Ony2Onay_Hata_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Ony2Onay_Hata_kararOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_Hata_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[HataKuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_Hata_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_Hata_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[ONY_2_ONAY - Hata Kuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_Hata_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_Hata_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_585]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_Hata_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_Hata_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_Hata_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_Hata_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Otomatik aktivite bitis kosulu saglanamadi: ONY_2_ONAY]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_Hata_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Ony2Onay_Hata_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116092]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Ony2Onay_Hata_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>serviceError</bpmn2:sourceRef><bpmn2:targetRef>Ony2Onay_Hata_ServiceErrorInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Ony2Onay_Hata_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Ony2Onay_Hata_kararOutputX</bpmn2:sourceRef><bpmn2:targetRef>uHataKarar</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="Ony2Onay_HataKarar" name="Karar" gatewayDirection="Diverging" default="F14_Ony2Onay_HataKarar_Ony2Onay_Giris">
+      <bpmn2:incoming>F12_Ony2Onay_Hata_Ony2Onay_HataKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F13_Ony2Onay_HataKarar_Ony2Onay_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F14_Ony2Onay_HataKarar_Ony2Onay_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="Ony2Onay_Cikis" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F10_Ony2Onay_Kontrol_Ony2Onay_Cikis</bpmn2:incoming>
+      <bpmn2:incoming>F13_Ony2Onay_HataKarar_Ony2Onay_Cikis</bpmn2:incoming>
+      <bpmn2:outgoing>F59_Ony2Onay_Cikis_IsIstekUpdate1_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="IsIstekUpdate1_Giris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F21_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Giris</bpmn2:incoming>
+      <bpmn2:incoming>F59_Ony2Onay_Cikis_IsIstekUpdate1_Giris</bpmn2:incoming>
+      <bpmn2:outgoing>F15_IsIstekUpdate1_Giris_IsIstekUpdate1</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="IsIstekUpdate1" drools:taskName="AvrasyaService" name="Is istek Update">
+      <bpmn2:documentation><![CDATA[Avrasya ActivityIndex 192420196, ProgramID 116095.]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Is istek Update]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.servisOncesi(e);
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F15_IsIstekUpdate1_Giris_IsIstekUpdate1</bpmn2:incoming>
+      <bpmn2:outgoing>F16_IsIstekUpdate1_IsIstekUpdate1_Kontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="IsIstekUpdate1_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_ActivityNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ActivityName"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_DataInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="IsIstekUpdate1_DataOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="IsIstekUpdate1_ServiceErrorOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_ActivityNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_DataInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>IsIstekUpdate1_DataOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>IsIstekUpdate1_ServiceErrorOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[AvrasyaService]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116095]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_ActivityNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Is istek Update]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_ActivityNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>IsIstekUpdate1_DataInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IsIstekUpdate1_DataOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IsIstekUpdate1_ServiceErrorOutputX</bpmn2:sourceRef><bpmn2:targetRef>serviceError</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="IsIstekUpdate1_Kontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F18_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Hata">
+      <bpmn2:incoming>F16_IsIstekUpdate1_IsIstekUpdate1_Kontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F17_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F18_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Hata</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="IsIstekUpdate1_Hata" name="Is istek Update - Hata Kuyrugu">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Is istek Update - Hata Kuyrugu]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[kcontext.setVariable("uHataKarar", null);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F18_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Hata</bpmn2:incoming>
+      <bpmn2:outgoing>F19_IsIstekUpdate1_Hata_IsIstekUpdate1_HataKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="IsIstekUpdate1_Hata_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_Hata_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_Hata_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_Hata_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_Hata_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_Hata_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_Hata_ServiceErrorInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:dataInput id="IsIstekUpdate1_Hata_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="IsIstekUpdate1_Hata_kararOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="karar"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_Hata_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_Hata_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_Hata_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_Hata_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_Hata_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_Hata_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_Hata_ServiceErrorInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate1_Hata_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>IsIstekUpdate1_Hata_kararOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_Hata_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[HataKuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_Hata_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_Hata_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Is istek Update - Hata Kuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_Hata_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_Hata_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_585]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_Hata_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_Hata_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_Hata_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_Hata_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Otomatik aktivite bitis kosulu saglanamadi: Is istek Update]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_Hata_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate1_Hata_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116095]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate1_Hata_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>serviceError</bpmn2:sourceRef><bpmn2:targetRef>IsIstekUpdate1_Hata_ServiceErrorInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>IsIstekUpdate1_Hata_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IsIstekUpdate1_Hata_kararOutputX</bpmn2:sourceRef><bpmn2:targetRef>uHataKarar</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="IsIstekUpdate1_HataKarar" name="Karar" gatewayDirection="Diverging" default="F21_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Giris">
+      <bpmn2:incoming>F19_IsIstekUpdate1_Hata_IsIstekUpdate1_HataKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F20_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F21_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="IsIstekUpdate1_Cikis" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F17_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Cikis</bpmn2:incoming>
+      <bpmn2:incoming>F20_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Cikis</bpmn2:incoming>
+      <bpmn2:outgoing>F60_IsIstekUpdate1_Cikis_WcBekleme</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="WcBekleme" name="WC Bekleme">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[WC Bekleme]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F60_IsIstekUpdate1_Cikis_WcBekleme</bpmn2:incoming>
+      <bpmn2:outgoing>F61_WcBekleme_WcControl_Giris</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="WcBekleme_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="WcBekleme_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="WcBekleme_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="WcBekleme_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="WcBekleme_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="WcBekleme_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="WcBekleme_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="WcBekleme_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="WcBekleme_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="WcBekleme_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>WcBekleme_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcBekleme_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcBekleme_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcBekleme_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcBekleme_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcBekleme_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>WcBekleme_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>WcBekleme_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>WcBekleme_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>WcBekleme_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcBekleme_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WcBekleme]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcBekleme_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcBekleme_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WC Bekleme]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcBekleme_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcBekleme_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_742]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcBekleme_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcBekleme_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcBekleme_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcBekleme_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[World Check Bekleme (WorkQueue 742)]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcBekleme_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>WcBekleme_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WcBekleme_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WcBekleme_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WcBekleme_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WcBekleme_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="WcControl_Giris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F28_WcControl_HataKarar_WcControl_Giris</bpmn2:incoming>
+      <bpmn2:incoming>F61_WcBekleme_WcControl_Giris</bpmn2:incoming>
+      <bpmn2:outgoing>F22_WcControl_Giris_WcControl</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="WcControl" drools:taskName="AvrasyaService" name="WC Control">
+      <bpmn2:documentation><![CDATA[World Check kontrol servisi. Avrasya ActivityIndex 142814473, ProgramID 179348.]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[WC Control]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.servisOncesi(e);
+e.getPro().setCallerApplication("PESINMAL");
+e.getPro().setApprovalFlag("");
+e.getNav().setRework("");
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F22_WcControl_Giris_WcControl</bpmn2:incoming>
+      <bpmn2:outgoing>F23_WcControl_WcControl_Kontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="WcControl_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="WcControl_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="WcControl_ActivityNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ActivityName"/>
+        <bpmn2:dataInput id="WcControl_DataInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="WcControl_DataOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="WcControl_ServiceErrorOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>WcControl_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_ActivityNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_DataInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>WcControl_DataOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>WcControl_ServiceErrorOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[AvrasyaService]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[179348]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_ActivityNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WC Control]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_ActivityNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>WcControl_DataInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WcControl_DataOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WcControl_ServiceErrorOutputX</bpmn2:sourceRef><bpmn2:targetRef>serviceError</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="WcControl_Kontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F25_WcControl_Kontrol_WcControl_Hata">
+      <bpmn2:incoming>F23_WcControl_WcControl_Kontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F24_WcControl_Kontrol_WcControl_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F25_WcControl_Kontrol_WcControl_Hata</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="WcControl_Hata" name="WC Control - Hata Kuyrugu">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[WC Control - Hata Kuyrugu]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[kcontext.setVariable("uHataKarar", null);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F25_WcControl_Kontrol_WcControl_Hata</bpmn2:incoming>
+      <bpmn2:outgoing>F26_WcControl_Hata_WcControl_HataKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="WcControl_Hata_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="WcControl_Hata_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="WcControl_Hata_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="WcControl_Hata_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="WcControl_Hata_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="WcControl_Hata_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="WcControl_Hata_ServiceErrorInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:dataInput id="WcControl_Hata_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="WcControl_Hata_kararOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="karar"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>WcControl_Hata_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_Hata_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_Hata_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_Hata_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_Hata_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_Hata_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_Hata_ServiceErrorInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WcControl_Hata_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>WcControl_Hata_kararOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_Hata_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[HataKuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_Hata_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_Hata_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WC Control - Hata Kuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_Hata_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_Hata_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_585]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_Hata_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_Hata_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_Hata_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_Hata_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Otomatik aktivite bitis kosulu saglanamadi: WC Control]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_Hata_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WcControl_Hata_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[179348]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WcControl_Hata_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>serviceError</bpmn2:sourceRef><bpmn2:targetRef>WcControl_Hata_ServiceErrorInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>WcControl_Hata_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WcControl_Hata_kararOutputX</bpmn2:sourceRef><bpmn2:targetRef>uHataKarar</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="WcControl_HataKarar" name="Karar" gatewayDirection="Diverging" default="F28_WcControl_HataKarar_WcControl_Giris">
+      <bpmn2:incoming>F26_WcControl_Hata_WcControl_HataKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F27_WcControl_HataKarar_WcControl_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F28_WcControl_HataKarar_WcControl_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="WcControl_Cikis" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F24_WcControl_Kontrol_WcControl_Cikis</bpmn2:incoming>
+      <bpmn2:incoming>F27_WcControl_HataKarar_WcControl_Cikis</bpmn2:incoming>
+      <bpmn2:outgoing>F62_WcControl_Cikis_IsIstekUpdate2_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="IsIstekUpdate2_Giris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F35_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Giris</bpmn2:incoming>
+      <bpmn2:incoming>F62_WcControl_Cikis_IsIstekUpdate2_Giris</bpmn2:incoming>
+      <bpmn2:outgoing>F29_IsIstekUpdate2_Giris_IsIstekUpdate2</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="IsIstekUpdate2" drools:taskName="AvrasyaService" name="Is istek Update">
+      <bpmn2:documentation><![CDATA[Avrasya ActivityIndex 135412519, ProgramID 116095.]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Is istek Update]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.servisOncesi(e);
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F29_IsIstekUpdate2_Giris_IsIstekUpdate2</bpmn2:incoming>
+      <bpmn2:outgoing>F30_IsIstekUpdate2_IsIstekUpdate2_Kontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="IsIstekUpdate2_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_ActivityNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ActivityName"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_DataInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="IsIstekUpdate2_DataOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="IsIstekUpdate2_ServiceErrorOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_ActivityNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_DataInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>IsIstekUpdate2_DataOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>IsIstekUpdate2_ServiceErrorOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[AvrasyaService]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116095]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_ActivityNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Is istek Update]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_ActivityNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>IsIstekUpdate2_DataInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IsIstekUpdate2_DataOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IsIstekUpdate2_ServiceErrorOutputX</bpmn2:sourceRef><bpmn2:targetRef>serviceError</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="IsIstekUpdate2_Kontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F32_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Hata">
+      <bpmn2:incoming>F30_IsIstekUpdate2_IsIstekUpdate2_Kontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F31_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F32_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Hata</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="IsIstekUpdate2_Hata" name="Is istek Update - Hata Kuyrugu">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Is istek Update - Hata Kuyrugu]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[kcontext.setVariable("uHataKarar", null);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F32_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Hata</bpmn2:incoming>
+      <bpmn2:outgoing>F33_IsIstekUpdate2_Hata_IsIstekUpdate2_HataKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="IsIstekUpdate2_Hata_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_Hata_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_Hata_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_Hata_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_Hata_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_Hata_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_Hata_ServiceErrorInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:dataInput id="IsIstekUpdate2_Hata_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="IsIstekUpdate2_Hata_kararOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="karar"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_Hata_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_Hata_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_Hata_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_Hata_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_Hata_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_Hata_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_Hata_ServiceErrorInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IsIstekUpdate2_Hata_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>IsIstekUpdate2_Hata_kararOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_Hata_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[HataKuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_Hata_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_Hata_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Is istek Update - Hata Kuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_Hata_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_Hata_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_585]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_Hata_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_Hata_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_Hata_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_Hata_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Otomatik aktivite bitis kosulu saglanamadi: Is istek Update]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_Hata_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IsIstekUpdate2_Hata_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116095]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IsIstekUpdate2_Hata_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>serviceError</bpmn2:sourceRef><bpmn2:targetRef>IsIstekUpdate2_Hata_ServiceErrorInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>IsIstekUpdate2_Hata_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IsIstekUpdate2_Hata_kararOutputX</bpmn2:sourceRef><bpmn2:targetRef>uHataKarar</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="IsIstekUpdate2_HataKarar" name="Karar" gatewayDirection="Diverging" default="F35_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Giris">
+      <bpmn2:incoming>F33_IsIstekUpdate2_Hata_IsIstekUpdate2_HataKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F34_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F35_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="IsIstekUpdate2_Cikis" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F31_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Cikis</bpmn2:incoming>
+      <bpmn2:incoming>F34_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Cikis</bpmn2:incoming>
+      <bpmn2:outgoing>F63_IsIstekUpdate2_Cikis_Fircosoft</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:callActivity id="Fircosoft" drools:independent="false" drools:waitForCompletion="true" name="Fircosoft" calledElement="IH_DAB_TANZIM_FC.FIRCOSOFT">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Fircosoft]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F63_IsIstekUpdate2_Cikis_Fircosoft</bpmn2:incoming>
+      <bpmn2:outgoing>F64_Fircosoft_End</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Fircosoft_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="Fircosoft_exportAllOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Fircosoft_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Fircosoft_exportAllOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Fircosoft_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Fircosoft_exportAllOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:callActivity>
+    <bpmn2:endEvent id="End" name="End">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[End]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F64_Fircosoft_End</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="F1_Ony1Onay_Giris_Ony1Onay" sourceRef="Ony1Onay_Giris" targetRef="Ony1Onay"/>
+    <bpmn2:sequenceFlow id="F2_Ony1Onay_Ony1Onay_Kontrol" sourceRef="Ony1Onay" targetRef="Ony1Onay_Kontrol"/>
+    <bpmn2:sequenceFlow id="F3_Ony1Onay_Kontrol_Ony1Onay_Cikis" sourceRef="Ony1Onay_Kontrol" targetRef="Ony1Onay_Cikis" name="Basarili">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Basarili]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.returnCodeTamam(((ExportAll) kcontext.getVariable("exportAll")), (String) kcontext.getVariable("serviceError"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F4_Ony1Onay_Kontrol_Ony1Onay_Hata" sourceRef="Ony1Onay_Kontrol" targetRef="Ony1Onay_Hata" name="Hata"/>
+    <bpmn2:sequenceFlow id="F5_Ony1Onay_Hata_Ony1Onay_HataKarar" sourceRef="Ony1Onay_Hata" targetRef="Ony1Onay_HataKarar"/>
+    <bpmn2:sequenceFlow id="F6_Ony1Onay_HataKarar_Ony1Onay_Cikis" sourceRef="Ony1Onay_HataKarar" targetRef="Ony1Onay_Cikis" name="Atla">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Atla]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.hataAtla((String) kcontext.getVariable("uHataKarar"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F7_Ony1Onay_HataKarar_Ony1Onay_Giris" sourceRef="Ony1Onay_HataKarar" targetRef="Ony1Onay_Giris" name="Tekrar Dene"/>
+    <bpmn2:sequenceFlow id="F8_Ony2Onay_Giris_Ony2Onay" sourceRef="Ony2Onay_Giris" targetRef="Ony2Onay"/>
+    <bpmn2:sequenceFlow id="F9_Ony2Onay_Ony2Onay_Kontrol" sourceRef="Ony2Onay" targetRef="Ony2Onay_Kontrol"/>
+    <bpmn2:sequenceFlow id="F10_Ony2Onay_Kontrol_Ony2Onay_Cikis" sourceRef="Ony2Onay_Kontrol" targetRef="Ony2Onay_Cikis" name="Basarili">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Basarili]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.returnCodeTamam(((ExportAll) kcontext.getVariable("exportAll")), (String) kcontext.getVariable("serviceError"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F11_Ony2Onay_Kontrol_Ony2Onay_Hata" sourceRef="Ony2Onay_Kontrol" targetRef="Ony2Onay_Hata" name="Hata"/>
+    <bpmn2:sequenceFlow id="F12_Ony2Onay_Hata_Ony2Onay_HataKarar" sourceRef="Ony2Onay_Hata" targetRef="Ony2Onay_HataKarar"/>
+    <bpmn2:sequenceFlow id="F13_Ony2Onay_HataKarar_Ony2Onay_Cikis" sourceRef="Ony2Onay_HataKarar" targetRef="Ony2Onay_Cikis" name="Atla">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Atla]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.hataAtla((String) kcontext.getVariable("uHataKarar"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F14_Ony2Onay_HataKarar_Ony2Onay_Giris" sourceRef="Ony2Onay_HataKarar" targetRef="Ony2Onay_Giris" name="Tekrar Dene"/>
+    <bpmn2:sequenceFlow id="F15_IsIstekUpdate1_Giris_IsIstekUpdate1" sourceRef="IsIstekUpdate1_Giris" targetRef="IsIstekUpdate1"/>
+    <bpmn2:sequenceFlow id="F16_IsIstekUpdate1_IsIstekUpdate1_Kontrol" sourceRef="IsIstekUpdate1" targetRef="IsIstekUpdate1_Kontrol"/>
+    <bpmn2:sequenceFlow id="F17_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Cikis" sourceRef="IsIstekUpdate1_Kontrol" targetRef="IsIstekUpdate1_Cikis" name="Basarili">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Basarili]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.returnCodeTamam(((ExportAll) kcontext.getVariable("exportAll")), (String) kcontext.getVariable("serviceError"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F18_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Hata" sourceRef="IsIstekUpdate1_Kontrol" targetRef="IsIstekUpdate1_Hata" name="Hata"/>
+    <bpmn2:sequenceFlow id="F19_IsIstekUpdate1_Hata_IsIstekUpdate1_HataKarar" sourceRef="IsIstekUpdate1_Hata" targetRef="IsIstekUpdate1_HataKarar"/>
+    <bpmn2:sequenceFlow id="F20_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Cikis" sourceRef="IsIstekUpdate1_HataKarar" targetRef="IsIstekUpdate1_Cikis" name="Atla">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Atla]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.hataAtla((String) kcontext.getVariable("uHataKarar"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F21_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Giris" sourceRef="IsIstekUpdate1_HataKarar" targetRef="IsIstekUpdate1_Giris" name="Tekrar Dene"/>
+    <bpmn2:sequenceFlow id="F22_WcControl_Giris_WcControl" sourceRef="WcControl_Giris" targetRef="WcControl"/>
+    <bpmn2:sequenceFlow id="F23_WcControl_WcControl_Kontrol" sourceRef="WcControl" targetRef="WcControl_Kontrol"/>
+    <bpmn2:sequenceFlow id="F24_WcControl_Kontrol_WcControl_Cikis" sourceRef="WcControl_Kontrol" targetRef="WcControl_Cikis" name="Basarili">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Basarili]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.returnCodeTamam(((ExportAll) kcontext.getVariable("exportAll")), (String) kcontext.getVariable("serviceError"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F25_WcControl_Kontrol_WcControl_Hata" sourceRef="WcControl_Kontrol" targetRef="WcControl_Hata" name="Hata"/>
+    <bpmn2:sequenceFlow id="F26_WcControl_Hata_WcControl_HataKarar" sourceRef="WcControl_Hata" targetRef="WcControl_HataKarar"/>
+    <bpmn2:sequenceFlow id="F27_WcControl_HataKarar_WcControl_Cikis" sourceRef="WcControl_HataKarar" targetRef="WcControl_Cikis" name="Atla">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Atla]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.hataAtla((String) kcontext.getVariable("uHataKarar"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F28_WcControl_HataKarar_WcControl_Giris" sourceRef="WcControl_HataKarar" targetRef="WcControl_Giris" name="Tekrar Dene"/>
+    <bpmn2:sequenceFlow id="F29_IsIstekUpdate2_Giris_IsIstekUpdate2" sourceRef="IsIstekUpdate2_Giris" targetRef="IsIstekUpdate2"/>
+    <bpmn2:sequenceFlow id="F30_IsIstekUpdate2_IsIstekUpdate2_Kontrol" sourceRef="IsIstekUpdate2" targetRef="IsIstekUpdate2_Kontrol"/>
+    <bpmn2:sequenceFlow id="F31_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Cikis" sourceRef="IsIstekUpdate2_Kontrol" targetRef="IsIstekUpdate2_Cikis" name="Basarili">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Basarili]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.returnCodeTamam(((ExportAll) kcontext.getVariable("exportAll")), (String) kcontext.getVariable("serviceError"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F32_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Hata" sourceRef="IsIstekUpdate2_Kontrol" targetRef="IsIstekUpdate2_Hata" name="Hata"/>
+    <bpmn2:sequenceFlow id="F33_IsIstekUpdate2_Hata_IsIstekUpdate2_HataKarar" sourceRef="IsIstekUpdate2_Hata" targetRef="IsIstekUpdate2_HataKarar"/>
+    <bpmn2:sequenceFlow id="F34_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Cikis" sourceRef="IsIstekUpdate2_HataKarar" targetRef="IsIstekUpdate2_Cikis" name="Atla">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Atla]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.hataAtla((String) kcontext.getVariable("uHataKarar"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F35_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Giris" sourceRef="IsIstekUpdate2_HataKarar" targetRef="IsIstekUpdate2_Giris" name="Tekrar Dene"/>
+    <bpmn2:sequenceFlow id="F36_Start_PortfoyDongu" sourceRef="Start" targetRef="PortfoyDongu"/>
+    <bpmn2:sequenceFlow id="F37_PortfoyDongu_PortfoyBelirleme1" sourceRef="PortfoyDongu" targetRef="PortfoyBelirleme1"/>
+    <bpmn2:sequenceFlow id="F38_PortfoyBelirleme1_PortfoyKontrol" sourceRef="PortfoyBelirleme1" targetRef="PortfoyKontrol"/>
+    <bpmn2:sequenceFlow id="F39_PortfoyKontrol_PortfoyDongu" sourceRef="PortfoyKontrol" targetRef="PortfoyDongu" name="Kuyruk bos" drools:priority="1">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Kuyruk bos]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.bos(((ExportAll) kcontext.getVariable("exportAll")).getQue().getQKuyrukAdi());]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F40_PortfoyKontrol_ErtesiGunDongu" sourceRef="PortfoyKontrol" targetRef="ErtesiGunDongu" name="ERTESI_GUN" drools:priority="2">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[ERTESI_GUN]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.karar(((ExportAll) kcontext.getVariable("exportAll")), Surec.ERTESI_GUN);]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F41_PortfoyKontrol_GirisDongu" sourceRef="PortfoyKontrol" targetRef="GirisDongu" name="Devam"/>
+    <bpmn2:sequenceFlow id="F42_ErtesiGunDongu_ErtesiGun" sourceRef="ErtesiGunDongu" targetRef="ErtesiGun"/>
+    <bpmn2:sequenceFlow id="F43_ErtesiGun_ErtesiGunKontrol" sourceRef="ErtesiGun" targetRef="ErtesiGunKontrol"/>
+    <bpmn2:sequenceFlow id="F44_ErtesiGunKontrol_GirisDongu" sourceRef="ErtesiGunKontrol" targetRef="GirisDongu" name="return_code = 00">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[return_code = 00]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.returnCodeTamam(((ExportAll) kcontext.getVariable("exportAll")), null);]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F45_ErtesiGunKontrol_ErtesiGunDongu" sourceRef="ErtesiGunKontrol" targetRef="ErtesiGunDongu" name="Tekrar"/>
+    <bpmn2:sequenceFlow id="F46_GirisDongu_DabTanzimGiris" sourceRef="GirisDongu" targetRef="DabTanzimGiris"/>
+    <bpmn2:sequenceFlow id="F47_DabTanzimGiris_GirisKontrol" sourceRef="DabTanzimGiris" targetRef="GirisKontrol"/>
+    <bpmn2:sequenceFlow id="F48_GirisKontrol_GirisDongu" sourceRef="GirisKontrol" targetRef="GirisDongu" name="rework != N" drools:priority="1">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[rework != N]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return !Surec.reworkTamam(((ExportAll) kcontext.getVariable("exportAll")));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F49_GirisKontrol_GirisCikis" sourceRef="GirisKontrol" targetRef="GirisCikis" name="IADE / IPTAL" drools:priority="2">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[IADE / IPTAL]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.cikisIstendi(((ExportAll) kcontext.getVariable("exportAll")));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F50_GirisKontrol_Ony1Onay_Giris" sourceRef="GirisKontrol" targetRef="Ony1Onay_Giris" name="ONAY"/>
+    <bpmn2:sequenceFlow id="F51_GirisCikis_EndGirisCikis" sourceRef="GirisCikis" targetRef="EndGirisCikis"/>
+    <bpmn2:sequenceFlow id="F52_Ony1Onay_Cikis_YetkiliDongu" sourceRef="Ony1Onay_Cikis" targetRef="YetkiliDongu"/>
+    <bpmn2:sequenceFlow id="F53_YetkiliDongu_Yetkili2Onay" sourceRef="YetkiliDongu" targetRef="Yetkili2Onay"/>
+    <bpmn2:sequenceFlow id="F54_Yetkili2Onay_YetkiliKontrol" sourceRef="Yetkili2Onay" targetRef="YetkiliKontrol"/>
+    <bpmn2:sequenceFlow id="F55_YetkiliKontrol_YetkiliDongu" sourceRef="YetkiliKontrol" targetRef="YetkiliDongu" name="rework != N" drools:priority="1">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[rework != N]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return !Surec.reworkTamam(((ExportAll) kcontext.getVariable("exportAll")));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F56_YetkiliKontrol_YetkiliCikis" sourceRef="YetkiliKontrol" targetRef="YetkiliCikis" name="IADE / IPTAL" drools:priority="2">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[IADE / IPTAL]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.cikisIstendi(((ExportAll) kcontext.getVariable("exportAll")));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F57_YetkiliKontrol_Ony2Onay_Giris" sourceRef="YetkiliKontrol" targetRef="Ony2Onay_Giris" name="ONAY"/>
+    <bpmn2:sequenceFlow id="F58_YetkiliCikis_EndYetkiliCikis" sourceRef="YetkiliCikis" targetRef="EndYetkiliCikis"/>
+    <bpmn2:sequenceFlow id="F59_Ony2Onay_Cikis_IsIstekUpdate1_Giris" sourceRef="Ony2Onay_Cikis" targetRef="IsIstekUpdate1_Giris"/>
+    <bpmn2:sequenceFlow id="F60_IsIstekUpdate1_Cikis_WcBekleme" sourceRef="IsIstekUpdate1_Cikis" targetRef="WcBekleme"/>
+    <bpmn2:sequenceFlow id="F61_WcBekleme_WcControl_Giris" sourceRef="WcBekleme" targetRef="WcControl_Giris"/>
+    <bpmn2:sequenceFlow id="F62_WcControl_Cikis_IsIstekUpdate2_Giris" sourceRef="WcControl_Cikis" targetRef="IsIstekUpdate2_Giris"/>
+    <bpmn2:sequenceFlow id="F63_IsIstekUpdate2_Cikis_Fircosoft" sourceRef="IsIstekUpdate2_Cikis" targetRef="Fircosoft"/>
+    <bpmn2:sequenceFlow id="F64_Fircosoft_End" sourceRef="Fircosoft" targetRef="End"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="diagram_IH_DAB_TANZIM_FC_DAB_TANZIM_GIRIS">
+    <bpmndi:BPMNPlane id="plane_IH_DAB_TANZIM_FC_DAB_TANZIM_GIRIS" bpmnElement="IH_DAB_TANZIM_FC.DAB_TANZIM_GIRIS">
+      <bpmndi:BPMNShape id="shape_Start" bpmnElement="Start"><dc:Bounds height="56" width="56" x="32" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_PortfoyDongu" bpmnElement="PortfoyDongu"><dc:Bounds height="56" width="56" x="122" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_PortfoyBelirleme1" bpmnElement="PortfoyBelirleme1"><dc:Bounds height="102" width="154" x="193" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_PortfoyKontrol" bpmnElement="PortfoyKontrol"><dc:Bounds height="56" width="56" x="372" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ErtesiGunDongu" bpmnElement="ErtesiGunDongu"><dc:Bounds height="56" width="56" x="372" y="412"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ErtesiGun" bpmnElement="ErtesiGun"><dc:Bounds height="102" width="154" x="453" y="389"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ErtesiGunKontrol" bpmnElement="ErtesiGunKontrol"><dc:Bounds height="56" width="56" x="632" y="412"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_GirisDongu" bpmnElement="GirisDongu"><dc:Bounds height="56" width="56" x="632" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_DabTanzimGiris" bpmnElement="DabTanzimGiris"><dc:Bounds height="102" width="154" x="713" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_GirisKontrol" bpmnElement="GirisKontrol"><dc:Bounds height="56" width="56" x="902" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_GirisCikis" bpmnElement="GirisCikis"><dc:Bounds height="102" width="154" x="853" y="39"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_EndGirisCikis" bpmnElement="EndGirisCikis"><dc:Bounds height="56" width="56" x="1062" y="62"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony1Onay_Giris" bpmnElement="Ony1Onay_Giris"><dc:Bounds height="56" width="56" x="1002" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony1Onay" bpmnElement="Ony1Onay"><dc:Bounds height="102" width="154" x="1083" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony1Onay_Kontrol" bpmnElement="Ony1Onay_Kontrol"><dc:Bounds height="56" width="56" x="1272" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony1Onay_Hata" bpmnElement="Ony1Onay_Hata"><dc:Bounds height="102" width="154" x="1223" y="374"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony1Onay_HataKarar" bpmnElement="Ony1Onay_HataKarar"><dc:Bounds height="56" width="56" x="1402" y="397"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony1Onay_Cikis" bpmnElement="Ony1Onay_Cikis"><dc:Bounds height="56" width="56" x="1402" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_YetkiliDongu" bpmnElement="YetkiliDongu"><dc:Bounds height="56" width="56" x="1512" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Yetkili2Onay" bpmnElement="Yetkili2Onay"><dc:Bounds height="102" width="154" x="1593" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_YetkiliKontrol" bpmnElement="YetkiliKontrol"><dc:Bounds height="56" width="56" x="1782" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_YetkiliCikis" bpmnElement="YetkiliCikis"><dc:Bounds height="102" width="154" x="1733" y="39"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_EndYetkiliCikis" bpmnElement="EndYetkiliCikis"><dc:Bounds height="56" width="56" x="1942" y="62"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony2Onay_Giris" bpmnElement="Ony2Onay_Giris"><dc:Bounds height="56" width="56" x="1882" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony2Onay" bpmnElement="Ony2Onay"><dc:Bounds height="102" width="154" x="1963" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony2Onay_Kontrol" bpmnElement="Ony2Onay_Kontrol"><dc:Bounds height="56" width="56" x="2152" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony2Onay_Hata" bpmnElement="Ony2Onay_Hata"><dc:Bounds height="102" width="154" x="2103" y="374"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony2Onay_HataKarar" bpmnElement="Ony2Onay_HataKarar"><dc:Bounds height="56" width="56" x="2282" y="397"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Ony2Onay_Cikis" bpmnElement="Ony2Onay_Cikis"><dc:Bounds height="56" width="56" x="2282" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate1_Giris" bpmnElement="IsIstekUpdate1_Giris"><dc:Bounds height="56" width="56" x="2372" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate1" bpmnElement="IsIstekUpdate1"><dc:Bounds height="102" width="154" x="2453" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate1_Kontrol" bpmnElement="IsIstekUpdate1_Kontrol"><dc:Bounds height="56" width="56" x="2642" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate1_Hata" bpmnElement="IsIstekUpdate1_Hata"><dc:Bounds height="102" width="154" x="2593" y="374"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate1_HataKarar" bpmnElement="IsIstekUpdate1_HataKarar"><dc:Bounds height="56" width="56" x="2772" y="397"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate1_Cikis" bpmnElement="IsIstekUpdate1_Cikis"><dc:Bounds height="56" width="56" x="2772" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WcBekleme" bpmnElement="WcBekleme"><dc:Bounds height="102" width="154" x="2873" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WcControl_Giris" bpmnElement="WcControl_Giris"><dc:Bounds height="56" width="56" x="3052" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WcControl" bpmnElement="WcControl"><dc:Bounds height="102" width="154" x="3133" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WcControl_Kontrol" bpmnElement="WcControl_Kontrol"><dc:Bounds height="56" width="56" x="3322" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WcControl_Hata" bpmnElement="WcControl_Hata"><dc:Bounds height="102" width="154" x="3273" y="374"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WcControl_HataKarar" bpmnElement="WcControl_HataKarar"><dc:Bounds height="56" width="56" x="3452" y="397"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WcControl_Cikis" bpmnElement="WcControl_Cikis"><dc:Bounds height="56" width="56" x="3452" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate2_Giris" bpmnElement="IsIstekUpdate2_Giris"><dc:Bounds height="56" width="56" x="3542" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate2" bpmnElement="IsIstekUpdate2"><dc:Bounds height="102" width="154" x="3623" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate2_Kontrol" bpmnElement="IsIstekUpdate2_Kontrol"><dc:Bounds height="56" width="56" x="3812" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate2_Hata" bpmnElement="IsIstekUpdate2_Hata"><dc:Bounds height="102" width="154" x="3763" y="374"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate2_HataKarar" bpmnElement="IsIstekUpdate2_HataKarar"><dc:Bounds height="56" width="56" x="3942" y="397"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IsIstekUpdate2_Cikis" bpmnElement="IsIstekUpdate2_Cikis"><dc:Bounds height="56" width="56" x="3942" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Fircosoft" bpmnElement="Fircosoft"><dc:Bounds height="102" width="154" x="4043" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_End" bpmnElement="End"><dc:Bounds height="56" width="56" x="4242" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_F1_Ony1Onay_Giris_Ony1Onay" bpmnElement="F1_Ony1Onay_Giris_Ony1Onay"><di:waypoint x="1058" y="260"/><di:waypoint x="1083" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F2_Ony1Onay_Ony1Onay_Kontrol" bpmnElement="F2_Ony1Onay_Ony1Onay_Kontrol"><di:waypoint x="1237" y="260"/><di:waypoint x="1272" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F3_Ony1Onay_Kontrol_Ony1Onay_Cikis" bpmnElement="F3_Ony1Onay_Kontrol_Ony1Onay_Cikis"><di:waypoint x="1328" y="260"/><di:waypoint x="1402" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F4_Ony1Onay_Kontrol_Ony1Onay_Hata" bpmnElement="F4_Ony1Onay_Kontrol_Ony1Onay_Hata"><di:waypoint x="1300" y="288"/><di:waypoint x="1300" y="374"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F5_Ony1Onay_Hata_Ony1Onay_HataKarar" bpmnElement="F5_Ony1Onay_Hata_Ony1Onay_HataKarar"><di:waypoint x="1377" y="425"/><di:waypoint x="1402" y="425"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F6_Ony1Onay_HataKarar_Ony1Onay_Cikis" bpmnElement="F6_Ony1Onay_HataKarar_Ony1Onay_Cikis"><di:waypoint x="1430" y="397"/><di:waypoint x="1430" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F7_Ony1Onay_HataKarar_Ony1Onay_Giris" bpmnElement="F7_Ony1Onay_HataKarar_Ony1Onay_Giris"><di:waypoint x="1430" y="453"/><di:waypoint x="1430" y="483"/><di:waypoint x="1030" y="483"/><di:waypoint x="1030" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F8_Ony2Onay_Giris_Ony2Onay" bpmnElement="F8_Ony2Onay_Giris_Ony2Onay"><di:waypoint x="1938" y="260"/><di:waypoint x="1963" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F9_Ony2Onay_Ony2Onay_Kontrol" bpmnElement="F9_Ony2Onay_Ony2Onay_Kontrol"><di:waypoint x="2117" y="260"/><di:waypoint x="2152" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F10_Ony2Onay_Kontrol_Ony2Onay_Cikis" bpmnElement="F10_Ony2Onay_Kontrol_Ony2Onay_Cikis"><di:waypoint x="2208" y="260"/><di:waypoint x="2282" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F11_Ony2Onay_Kontrol_Ony2Onay_Hata" bpmnElement="F11_Ony2Onay_Kontrol_Ony2Onay_Hata"><di:waypoint x="2180" y="288"/><di:waypoint x="2180" y="374"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F12_Ony2Onay_Hata_Ony2Onay_HataKarar" bpmnElement="F12_Ony2Onay_Hata_Ony2Onay_HataKarar"><di:waypoint x="2257" y="425"/><di:waypoint x="2282" y="425"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F13_Ony2Onay_HataKarar_Ony2Onay_Cikis" bpmnElement="F13_Ony2Onay_HataKarar_Ony2Onay_Cikis"><di:waypoint x="2310" y="397"/><di:waypoint x="2310" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F14_Ony2Onay_HataKarar_Ony2Onay_Giris" bpmnElement="F14_Ony2Onay_HataKarar_Ony2Onay_Giris"><di:waypoint x="2310" y="453"/><di:waypoint x="2310" y="483"/><di:waypoint x="1910" y="483"/><di:waypoint x="1910" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F15_IsIstekUpdate1_Giris_IsIstekUpdate1" bpmnElement="F15_IsIstekUpdate1_Giris_IsIstekUpdate1"><di:waypoint x="2428" y="260"/><di:waypoint x="2453" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F16_IsIstekUpdate1_IsIstekUpdate1_Kontrol" bpmnElement="F16_IsIstekUpdate1_IsIstekUpdate1_Kontrol"><di:waypoint x="2607" y="260"/><di:waypoint x="2642" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F17_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Cikis" bpmnElement="F17_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Cikis"><di:waypoint x="2698" y="260"/><di:waypoint x="2772" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F18_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Hata" bpmnElement="F18_IsIstekUpdate1_Kontrol_IsIstekUpdate1_Hata"><di:waypoint x="2670" y="288"/><di:waypoint x="2670" y="374"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F19_IsIstekUpdate1_Hata_IsIstekUpdate1_HataKarar" bpmnElement="F19_IsIstekUpdate1_Hata_IsIstekUpdate1_HataKarar"><di:waypoint x="2747" y="425"/><di:waypoint x="2772" y="425"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F20_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Cikis" bpmnElement="F20_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Cikis"><di:waypoint x="2800" y="397"/><di:waypoint x="2800" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F21_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Giris" bpmnElement="F21_IsIstekUpdate1_HataKarar_IsIstekUpdate1_Giris"><di:waypoint x="2800" y="453"/><di:waypoint x="2800" y="483"/><di:waypoint x="2400" y="483"/><di:waypoint x="2400" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F22_WcControl_Giris_WcControl" bpmnElement="F22_WcControl_Giris_WcControl"><di:waypoint x="3108" y="260"/><di:waypoint x="3133" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F23_WcControl_WcControl_Kontrol" bpmnElement="F23_WcControl_WcControl_Kontrol"><di:waypoint x="3287" y="260"/><di:waypoint x="3322" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F24_WcControl_Kontrol_WcControl_Cikis" bpmnElement="F24_WcControl_Kontrol_WcControl_Cikis"><di:waypoint x="3378" y="260"/><di:waypoint x="3452" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F25_WcControl_Kontrol_WcControl_Hata" bpmnElement="F25_WcControl_Kontrol_WcControl_Hata"><di:waypoint x="3350" y="288"/><di:waypoint x="3350" y="374"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F26_WcControl_Hata_WcControl_HataKarar" bpmnElement="F26_WcControl_Hata_WcControl_HataKarar"><di:waypoint x="3427" y="425"/><di:waypoint x="3452" y="425"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F27_WcControl_HataKarar_WcControl_Cikis" bpmnElement="F27_WcControl_HataKarar_WcControl_Cikis"><di:waypoint x="3480" y="397"/><di:waypoint x="3480" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F28_WcControl_HataKarar_WcControl_Giris" bpmnElement="F28_WcControl_HataKarar_WcControl_Giris"><di:waypoint x="3480" y="453"/><di:waypoint x="3480" y="483"/><di:waypoint x="3080" y="483"/><di:waypoint x="3080" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F29_IsIstekUpdate2_Giris_IsIstekUpdate2" bpmnElement="F29_IsIstekUpdate2_Giris_IsIstekUpdate2"><di:waypoint x="3598" y="260"/><di:waypoint x="3623" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F30_IsIstekUpdate2_IsIstekUpdate2_Kontrol" bpmnElement="F30_IsIstekUpdate2_IsIstekUpdate2_Kontrol"><di:waypoint x="3777" y="260"/><di:waypoint x="3812" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F31_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Cikis" bpmnElement="F31_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Cikis"><di:waypoint x="3868" y="260"/><di:waypoint x="3942" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F32_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Hata" bpmnElement="F32_IsIstekUpdate2_Kontrol_IsIstekUpdate2_Hata"><di:waypoint x="3840" y="288"/><di:waypoint x="3840" y="374"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F33_IsIstekUpdate2_Hata_IsIstekUpdate2_HataKarar" bpmnElement="F33_IsIstekUpdate2_Hata_IsIstekUpdate2_HataKarar"><di:waypoint x="3917" y="425"/><di:waypoint x="3942" y="425"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F34_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Cikis" bpmnElement="F34_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Cikis"><di:waypoint x="3970" y="397"/><di:waypoint x="3970" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F35_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Giris" bpmnElement="F35_IsIstekUpdate2_HataKarar_IsIstekUpdate2_Giris"><di:waypoint x="3970" y="453"/><di:waypoint x="3970" y="483"/><di:waypoint x="3570" y="483"/><di:waypoint x="3570" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F36_Start_PortfoyDongu" bpmnElement="F36_Start_PortfoyDongu"><di:waypoint x="88" y="260"/><di:waypoint x="122" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F37_PortfoyDongu_PortfoyBelirleme1" bpmnElement="F37_PortfoyDongu_PortfoyBelirleme1"><di:waypoint x="178" y="260"/><di:waypoint x="193" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F38_PortfoyBelirleme1_PortfoyKontrol" bpmnElement="F38_PortfoyBelirleme1_PortfoyKontrol"><di:waypoint x="347" y="260"/><di:waypoint x="372" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F39_PortfoyKontrol_PortfoyDongu" bpmnElement="F39_PortfoyKontrol_PortfoyDongu"><di:waypoint x="400" y="232"/><di:waypoint x="400" y="192"/><di:waypoint x="150" y="192"/><di:waypoint x="150" y="232"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F40_PortfoyKontrol_ErtesiGunDongu" bpmnElement="F40_PortfoyKontrol_ErtesiGunDongu"><di:waypoint x="400" y="288"/><di:waypoint x="400" y="412"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F41_PortfoyKontrol_GirisDongu" bpmnElement="F41_PortfoyKontrol_GirisDongu"><di:waypoint x="428" y="260"/><di:waypoint x="632" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F42_ErtesiGunDongu_ErtesiGun" bpmnElement="F42_ErtesiGunDongu_ErtesiGun"><di:waypoint x="428" y="440"/><di:waypoint x="453" y="440"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F43_ErtesiGun_ErtesiGunKontrol" bpmnElement="F43_ErtesiGun_ErtesiGunKontrol"><di:waypoint x="607" y="440"/><di:waypoint x="632" y="440"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F44_ErtesiGunKontrol_GirisDongu" bpmnElement="F44_ErtesiGunKontrol_GirisDongu"><di:waypoint x="660" y="412"/><di:waypoint x="660" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F45_ErtesiGunKontrol_ErtesiGunDongu" bpmnElement="F45_ErtesiGunKontrol_ErtesiGunDongu"><di:waypoint x="660" y="468"/><di:waypoint x="660" y="531"/><di:waypoint x="400" y="531"/><di:waypoint x="400" y="468"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F46_GirisDongu_DabTanzimGiris" bpmnElement="F46_GirisDongu_DabTanzimGiris"><di:waypoint x="688" y="260"/><di:waypoint x="713" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F47_DabTanzimGiris_GirisKontrol" bpmnElement="F47_DabTanzimGiris_GirisKontrol"><di:waypoint x="867" y="260"/><di:waypoint x="902" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F48_GirisKontrol_GirisDongu" bpmnElement="F48_GirisKontrol_GirisDongu"><di:waypoint x="930" y="232"/><di:waypoint x="930" y="192"/><di:waypoint x="660" y="192"/><di:waypoint x="660" y="232"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F49_GirisKontrol_GirisCikis" bpmnElement="F49_GirisKontrol_GirisCikis"><di:waypoint x="930" y="232"/><di:waypoint x="930" y="141"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F50_GirisKontrol_Ony1Onay_Giris" bpmnElement="F50_GirisKontrol_Ony1Onay_Giris"><di:waypoint x="958" y="260"/><di:waypoint x="1002" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F51_GirisCikis_EndGirisCikis" bpmnElement="F51_GirisCikis_EndGirisCikis"><di:waypoint x="1007" y="90"/><di:waypoint x="1062" y="90"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F52_Ony1Onay_Cikis_YetkiliDongu" bpmnElement="F52_Ony1Onay_Cikis_YetkiliDongu"><di:waypoint x="1458" y="260"/><di:waypoint x="1512" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F53_YetkiliDongu_Yetkili2Onay" bpmnElement="F53_YetkiliDongu_Yetkili2Onay"><di:waypoint x="1568" y="260"/><di:waypoint x="1593" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F54_Yetkili2Onay_YetkiliKontrol" bpmnElement="F54_Yetkili2Onay_YetkiliKontrol"><di:waypoint x="1747" y="260"/><di:waypoint x="1782" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F55_YetkiliKontrol_YetkiliDongu" bpmnElement="F55_YetkiliKontrol_YetkiliDongu"><di:waypoint x="1810" y="232"/><di:waypoint x="1810" y="192"/><di:waypoint x="1540" y="192"/><di:waypoint x="1540" y="232"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F56_YetkiliKontrol_YetkiliCikis" bpmnElement="F56_YetkiliKontrol_YetkiliCikis"><di:waypoint x="1810" y="232"/><di:waypoint x="1810" y="141"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F57_YetkiliKontrol_Ony2Onay_Giris" bpmnElement="F57_YetkiliKontrol_Ony2Onay_Giris"><di:waypoint x="1838" y="260"/><di:waypoint x="1882" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F58_YetkiliCikis_EndYetkiliCikis" bpmnElement="F58_YetkiliCikis_EndYetkiliCikis"><di:waypoint x="1887" y="90"/><di:waypoint x="1942" y="90"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F59_Ony2Onay_Cikis_IsIstekUpdate1_Giris" bpmnElement="F59_Ony2Onay_Cikis_IsIstekUpdate1_Giris"><di:waypoint x="2338" y="260"/><di:waypoint x="2372" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F60_IsIstekUpdate1_Cikis_WcBekleme" bpmnElement="F60_IsIstekUpdate1_Cikis_WcBekleme"><di:waypoint x="2828" y="260"/><di:waypoint x="2873" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F61_WcBekleme_WcControl_Giris" bpmnElement="F61_WcBekleme_WcControl_Giris"><di:waypoint x="3027" y="260"/><di:waypoint x="3052" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F62_WcControl_Cikis_IsIstekUpdate2_Giris" bpmnElement="F62_WcControl_Cikis_IsIstekUpdate2_Giris"><di:waypoint x="3508" y="260"/><di:waypoint x="3542" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F63_IsIstekUpdate2_Cikis_Fircosoft" bpmnElement="F63_IsIstekUpdate2_Cikis_Fircosoft"><di:waypoint x="3998" y="260"/><di:waypoint x="4043" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F64_Fircosoft_End" bpmnElement="F64_Fircosoft_End"><di:waypoint x="4197" y="260"/><di:waypoint x="4242" y="260"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship type="BPSimData"><bpmn2:extensionElements><bpsim:BPSimData><bpsim:Scenario id="default" name="Simulationscenario"><bpsim:ScenarioParameters/></bpsim:Scenario></bpsim:BPSimData></bpmn2:extensionElements><bpmn2:source>_IH_DAB_TANZIM_FC_DAB_TANZIM_GIRIS</bpmn2:source><bpmn2:target>_IH_DAB_TANZIM_FC_DAB_TANZIM_GIRIS</bpmn2:target></bpmn2:relationship>
+</bpmn2:definitions>
