@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd http://www.omg.org/spec/DD/20100524/DC DC.xsd http://www.omg.org/spec/DD/20100524/DI DI.xsd " id="_IH_DAB_TANZIM_FC_ENCLAVE" exporter="jBPM Process Modeler" exporterVersion="2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:itemDefinition id="_exportAllItem" structureRef="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll"/>
+  <bpmn2:itemDefinition id="_StringItem" structureRef="String"/>
+  <bpmn2:process id="IH_DAB_TANZIM_FC.ENCLAVE" drools:packageName="com.garantibbva.processarchitecture.ihdabtanzimfc" drools:version="1.0" drools:adHoc="false" name="ENCLAVE" isExecutable="true" processType="Public">
+    <bpmn2:documentation><![CDATA[Avrasya ENCLAVE blogu (DLC dongusu). sNAV/restart_req'e gore: IPTAL -> Islem Iptal, IADE -> Subeye Iade (sonra tekrar), diger -> DAB Tanzim Giris.]]></bpmn2:documentation>
+    <bpmn2:extensionElements>
+      <drools:import name="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll"/>
+      <drools:import name="com.garantibbva.processarchitecture.ihdabtanzimfc.surec.Surec"/>
+    </bpmn2:extensionElements>
+    <bpmn2:property id="exportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+    <bpmn2:property id="serviceError" itemSubjectRef="_StringItem" name="serviceError"/>
+    <bpmn2:property id="uAction" itemSubjectRef="_StringItem" name="uAction"/>
+    <bpmn2:property id="uRework" itemSubjectRef="_StringItem" name="uRework"/>
+    <bpmn2:property id="uKuyrukAdi" itemSubjectRef="_StringItem" name="uKuyrukAdi"/>
+    <bpmn2:property id="uReturnCode" itemSubjectRef="_StringItem" name="uReturnCode"/>
+    <bpmn2:property id="uHataKarar" itemSubjectRef="_StringItem" name="uHataKarar"/>
+    <bpmn2:startEvent id="Start" name="Start">
+      <bpmn2:outgoing>F8_Start_Dongu</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:exclusiveGateway id="Dongu" name="ENCLAVE" gatewayDirection="Converging">
+      <bpmn2:incoming>F8_Start_Dongu</bpmn2:incoming>
+      <bpmn2:incoming>F15_CikisKontrol_Dongu</bpmn2:incoming>
+      <bpmn2:incoming>F18_IadeSonrasi_Dongu</bpmn2:incoming>
+      <bpmn2:outgoing>F9_Dongu_Yonlendirme</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="Yonlendirme" name="Yonlendirme" gatewayDirection="Diverging" default="F12_Yonlendirme_DabTanzimGiris">
+      <bpmn2:incoming>F9_Dongu_Yonlendirme</bpmn2:incoming>
+      <bpmn2:outgoing>F10_Yonlendirme_IslemIptal_Giris</bpmn2:outgoing>
+      <bpmn2:outgoing>F11_Yonlendirme_SubeyeIade</bpmn2:outgoing>
+      <bpmn2:outgoing>F12_Yonlendirme_DabTanzimGiris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="IslemIptal_Giris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F7_IslemIptal_HataKarar_IslemIptal_Giris</bpmn2:incoming>
+      <bpmn2:incoming>F10_Yonlendirme_IslemIptal_Giris</bpmn2:incoming>
+      <bpmn2:outgoing>F1_IslemIptal_Giris_IslemIptal</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="IslemIptal" drools:taskName="AvrasyaService" name="Islem Iptal">
+      <bpmn2:documentation><![CDATA[Avrasya ActivityIndex 190424881, ProgramID 116094. EndCondition: sWIP/return_code = "00". Girdi: sNAV/restart_req = ''.]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Islem Iptal]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.servisOncesi(e);
+e.getNav().setRestartReq("");
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F1_IslemIptal_Giris_IslemIptal</bpmn2:incoming>
+      <bpmn2:outgoing>F2_IslemIptal_IslemIptal_Kontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="IslemIptal_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="IslemIptal_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="IslemIptal_ActivityNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ActivityName"/>
+        <bpmn2:dataInput id="IslemIptal_DataInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="IslemIptal_DataOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="Data"/>
+        <bpmn2:dataOutput id="IslemIptal_ServiceErrorOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>IslemIptal_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_ActivityNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_DataInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>IslemIptal_DataOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>IslemIptal_ServiceErrorOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[AvrasyaService]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116094]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_ActivityNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Islem Iptal]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_ActivityNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>IslemIptal_DataInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IslemIptal_DataOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IslemIptal_ServiceErrorOutputX</bpmn2:sourceRef><bpmn2:targetRef>serviceError</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="IslemIptal_Kontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F4_IslemIptal_Kontrol_IslemIptal_Hata">
+      <bpmn2:incoming>F2_IslemIptal_IslemIptal_Kontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F3_IslemIptal_Kontrol_IslemIptal_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F4_IslemIptal_Kontrol_IslemIptal_Hata</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="IslemIptal_Hata" name="Islem Iptal - Hata Kuyrugu">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Islem Iptal - Hata Kuyrugu]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[kcontext.setVariable("uHataKarar", null);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F4_IslemIptal_Kontrol_IslemIptal_Hata</bpmn2:incoming>
+      <bpmn2:outgoing>F5_IslemIptal_Hata_IslemIptal_HataKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="IslemIptal_Hata_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="IslemIptal_Hata_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="IslemIptal_Hata_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="IslemIptal_Hata_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="IslemIptal_Hata_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="IslemIptal_Hata_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="IslemIptal_Hata_ServiceErrorInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:dataInput id="IslemIptal_Hata_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="IslemIptal_Hata_kararOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="karar"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>IslemIptal_Hata_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_Hata_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_Hata_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_Hata_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_Hata_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_Hata_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_Hata_ServiceErrorInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>IslemIptal_Hata_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>IslemIptal_Hata_kararOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_Hata_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[HataKuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_Hata_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_Hata_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Islem Iptal - Hata Kuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_Hata_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_Hata_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_585]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_Hata_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_Hata_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_Hata_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_Hata_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Otomatik aktivite bitis kosulu saglanamadi: Islem Iptal]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_Hata_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>IslemIptal_Hata_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[116094]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[IslemIptal_Hata_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>serviceError</bpmn2:sourceRef><bpmn2:targetRef>IslemIptal_Hata_ServiceErrorInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>IslemIptal_Hata_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>IslemIptal_Hata_kararOutputX</bpmn2:sourceRef><bpmn2:targetRef>uHataKarar</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="IslemIptal_HataKarar" name="Karar" gatewayDirection="Diverging" default="F7_IslemIptal_HataKarar_IslemIptal_Giris">
+      <bpmn2:incoming>F5_IslemIptal_Hata_IslemIptal_HataKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F6_IslemIptal_HataKarar_IslemIptal_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F7_IslemIptal_HataKarar_IslemIptal_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="IslemIptal_Cikis" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F3_IslemIptal_Kontrol_IslemIptal_Cikis</bpmn2:incoming>
+      <bpmn2:incoming>F6_IslemIptal_HataKarar_IslemIptal_Cikis</bpmn2:incoming>
+      <bpmn2:outgoing>F13_IslemIptal_Cikis_EndIptal</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:endEvent id="EndIptal" name="Islem Iptal Edildi">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Islem Iptal Edildi]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F13_IslemIptal_Cikis_EndIptal</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:callActivity id="DabTanzimGiris" drools:independent="false" drools:waitForCompletion="true" name="DAB Tanzim Giris" calledElement="IH_DAB_TANZIM_FC.DAB_TANZIM_GIRIS">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[DAB Tanzim Giris]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F12_Yonlendirme_DabTanzimGiris</bpmn2:incoming>
+      <bpmn2:outgoing>F14_DabTanzimGiris_CikisKontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="DabTanzimGiris_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="DabTanzimGiris_exportAllOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>DabTanzimGiris_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>DabTanzimGiris_exportAllOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>DabTanzimGiris_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>DabTanzimGiris_exportAllOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:callActivity>
+    <bpmn2:exclusiveGateway id="CikisKontrol" name="Iade / Iptal?" gatewayDirection="Diverging" default="F16_CikisKontrol_EndTamam">
+      <bpmn2:incoming>F14_DabTanzimGiris_CikisKontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F15_CikisKontrol_Dongu</bpmn2:outgoing>
+      <bpmn2:outgoing>F16_CikisKontrol_EndTamam</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:endEvent id="EndTamam" name="DAB Tanzim Tamamlandi">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[DAB Tanzim Tamamlandi]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F16_CikisKontrol_EndTamam</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:callActivity id="SubeyeIade" drools:independent="false" drools:waitForCompletion="true" name="Subeye Iade" calledElement="IH_DAB_TANZIM_FC.SUBEYE_IADE">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Subeye Iade]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F11_Yonlendirme_SubeyeIade</bpmn2:incoming>
+      <bpmn2:outgoing>F17_SubeyeIade_IadeSonrasi</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="SubeyeIade_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="SubeyeIade_exportAllOutputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>SubeyeIade_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>SubeyeIade_exportAllOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>SubeyeIade_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>SubeyeIade_exportAllOutputX</bpmn2:sourceRef><bpmn2:targetRef>exportAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:callActivity>
+    <bpmn2:scriptTask id="IadeSonrasi" name="Iade Sonrasi" scriptFormat="http://www.java.com/java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade Sonrasi]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F17_SubeyeIade_IadeSonrasi</bpmn2:incoming>
+      <bpmn2:outgoing>F18_IadeSonrasi_Dongu</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+e.getNav().setRestartReq(null);
+kcontext.setVariable("exportAll", e);]]></bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:sequenceFlow id="F1_IslemIptal_Giris_IslemIptal" sourceRef="IslemIptal_Giris" targetRef="IslemIptal"/>
+    <bpmn2:sequenceFlow id="F2_IslemIptal_IslemIptal_Kontrol" sourceRef="IslemIptal" targetRef="IslemIptal_Kontrol"/>
+    <bpmn2:sequenceFlow id="F3_IslemIptal_Kontrol_IslemIptal_Cikis" sourceRef="IslemIptal_Kontrol" targetRef="IslemIptal_Cikis" name="Basarili">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Basarili]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.returnCodeTamam(((ExportAll) kcontext.getVariable("exportAll")), (String) kcontext.getVariable("serviceError"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F4_IslemIptal_Kontrol_IslemIptal_Hata" sourceRef="IslemIptal_Kontrol" targetRef="IslemIptal_Hata" name="Hata"/>
+    <bpmn2:sequenceFlow id="F5_IslemIptal_Hata_IslemIptal_HataKarar" sourceRef="IslemIptal_Hata" targetRef="IslemIptal_HataKarar"/>
+    <bpmn2:sequenceFlow id="F6_IslemIptal_HataKarar_IslemIptal_Cikis" sourceRef="IslemIptal_HataKarar" targetRef="IslemIptal_Cikis" name="Atla">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Atla]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.hataAtla((String) kcontext.getVariable("uHataKarar"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F7_IslemIptal_HataKarar_IslemIptal_Giris" sourceRef="IslemIptal_HataKarar" targetRef="IslemIptal_Giris" name="Tekrar Dene"/>
+    <bpmn2:sequenceFlow id="F8_Start_Dongu" sourceRef="Start" targetRef="Dongu"/>
+    <bpmn2:sequenceFlow id="F9_Dongu_Yonlendirme" sourceRef="Dongu" targetRef="Yonlendirme"/>
+    <bpmn2:sequenceFlow id="F10_Yonlendirme_IslemIptal_Giris" sourceRef="Yonlendirme" targetRef="IslemIptal_Giris" name="IPTAL" drools:priority="1">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[IPTAL]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.restartReq(((ExportAll) kcontext.getVariable("exportAll")), Surec.IPTAL);]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F11_Yonlendirme_SubeyeIade" sourceRef="Yonlendirme" targetRef="SubeyeIade" name="IADE" drools:priority="2">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[IADE]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.restartReq(((ExportAll) kcontext.getVariable("exportAll")), Surec.IADE);]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F12_Yonlendirme_DabTanzimGiris" sourceRef="Yonlendirme" targetRef="DabTanzimGiris" name="Devam"/>
+    <bpmn2:sequenceFlow id="F13_IslemIptal_Cikis_EndIptal" sourceRef="IslemIptal_Cikis" targetRef="EndIptal"/>
+    <bpmn2:sequenceFlow id="F14_DabTanzimGiris_CikisKontrol" sourceRef="DabTanzimGiris" targetRef="CikisKontrol"/>
+    <bpmn2:sequenceFlow id="F15_CikisKontrol_Dongu" sourceRef="CikisKontrol" targetRef="Dongu" name="IADE / IPTAL">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[IADE / IPTAL]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.restartReq(((ExportAll) kcontext.getVariable("exportAll")), Surec.IADE) || Surec.restartReq(((ExportAll) kcontext.getVariable("exportAll")), Surec.IPTAL);]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F16_CikisKontrol_EndTamam" sourceRef="CikisKontrol" targetRef="EndTamam" name="Tamam"/>
+    <bpmn2:sequenceFlow id="F17_SubeyeIade_IadeSonrasi" sourceRef="SubeyeIade" targetRef="IadeSonrasi"/>
+    <bpmn2:sequenceFlow id="F18_IadeSonrasi_Dongu" sourceRef="IadeSonrasi" targetRef="Dongu"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="diagram_IH_DAB_TANZIM_FC_ENCLAVE">
+    <bpmndi:BPMNPlane id="plane_IH_DAB_TANZIM_FC_ENCLAVE" bpmnElement="IH_DAB_TANZIM_FC.ENCLAVE">
+      <bpmndi:BPMNShape id="shape_Start" bpmnElement="Start"><dc:Bounds height="56" width="56" x="32" y="392"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Dongu" bpmnElement="Dongu"><dc:Bounds height="56" width="56" x="132" y="392"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Yonlendirme" bpmnElement="Yonlendirme"><dc:Bounds height="56" width="56" x="232" y="392"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IslemIptal_Giris" bpmnElement="IslemIptal_Giris"><dc:Bounds height="56" width="56" x="332" y="72"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IslemIptal" bpmnElement="IslemIptal"><dc:Bounds height="102" width="154" x="413" y="49"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IslemIptal_Kontrol" bpmnElement="IslemIptal_Kontrol"><dc:Bounds height="56" width="56" x="602" y="72"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IslemIptal_Hata" bpmnElement="IslemIptal_Hata"><dc:Bounds height="102" width="154" x="553" y="214"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IslemIptal_HataKarar" bpmnElement="IslemIptal_HataKarar"><dc:Bounds height="56" width="56" x="732" y="237"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IslemIptal_Cikis" bpmnElement="IslemIptal_Cikis"><dc:Bounds height="56" width="56" x="732" y="72"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_EndIptal" bpmnElement="EndIptal"><dc:Bounds height="56" width="56" x="872" y="72"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_DabTanzimGiris" bpmnElement="DabTanzimGiris"><dc:Bounds height="102" width="154" x="413" y="369"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_CikisKontrol" bpmnElement="CikisKontrol"><dc:Bounds height="56" width="56" x="612" y="392"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_EndTamam" bpmnElement="EndTamam"><dc:Bounds height="56" width="56" x="872" y="392"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_SubeyeIade" bpmnElement="SubeyeIade"><dc:Bounds height="102" width="154" x="413" y="549"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IadeSonrasi" bpmnElement="IadeSonrasi"><dc:Bounds height="102" width="154" x="613" y="549"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_F1_IslemIptal_Giris_IslemIptal" bpmnElement="F1_IslemIptal_Giris_IslemIptal"><di:waypoint x="388" y="100"/><di:waypoint x="413" y="100"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F2_IslemIptal_IslemIptal_Kontrol" bpmnElement="F2_IslemIptal_IslemIptal_Kontrol"><di:waypoint x="567" y="100"/><di:waypoint x="602" y="100"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F3_IslemIptal_Kontrol_IslemIptal_Cikis" bpmnElement="F3_IslemIptal_Kontrol_IslemIptal_Cikis"><di:waypoint x="658" y="100"/><di:waypoint x="732" y="100"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F4_IslemIptal_Kontrol_IslemIptal_Hata" bpmnElement="F4_IslemIptal_Kontrol_IslemIptal_Hata"><di:waypoint x="630" y="128"/><di:waypoint x="630" y="214"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F5_IslemIptal_Hata_IslemIptal_HataKarar" bpmnElement="F5_IslemIptal_Hata_IslemIptal_HataKarar"><di:waypoint x="707" y="265"/><di:waypoint x="732" y="265"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F6_IslemIptal_HataKarar_IslemIptal_Cikis" bpmnElement="F6_IslemIptal_HataKarar_IslemIptal_Cikis"><di:waypoint x="760" y="237"/><di:waypoint x="760" y="128"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F7_IslemIptal_HataKarar_IslemIptal_Giris" bpmnElement="F7_IslemIptal_HataKarar_IslemIptal_Giris"><di:waypoint x="760" y="293"/><di:waypoint x="760" y="323"/><di:waypoint x="360" y="323"/><di:waypoint x="360" y="128"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F8_Start_Dongu" bpmnElement="F8_Start_Dongu"><di:waypoint x="88" y="420"/><di:waypoint x="132" y="420"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F9_Dongu_Yonlendirme" bpmnElement="F9_Dongu_Yonlendirme"><di:waypoint x="188" y="420"/><di:waypoint x="232" y="420"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F10_Yonlendirme_IslemIptal_Giris" bpmnElement="F10_Yonlendirme_IslemIptal_Giris"><di:waypoint x="260" y="392"/><di:waypoint x="260" y="100"/><di:waypoint x="332" y="100"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F11_Yonlendirme_SubeyeIade" bpmnElement="F11_Yonlendirme_SubeyeIade"><di:waypoint x="260" y="448"/><di:waypoint x="260" y="600"/><di:waypoint x="413" y="600"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F12_Yonlendirme_DabTanzimGiris" bpmnElement="F12_Yonlendirme_DabTanzimGiris"><di:waypoint x="288" y="420"/><di:waypoint x="413" y="420"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F13_IslemIptal_Cikis_EndIptal" bpmnElement="F13_IslemIptal_Cikis_EndIptal"><di:waypoint x="788" y="100"/><di:waypoint x="872" y="100"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F14_DabTanzimGiris_CikisKontrol" bpmnElement="F14_DabTanzimGiris_CikisKontrol"><di:waypoint x="567" y="420"/><di:waypoint x="612" y="420"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F15_CikisKontrol_Dongu" bpmnElement="F15_CikisKontrol_Dongu"><di:waypoint x="640" y="392"/><di:waypoint x="640" y="352"/><di:waypoint x="160" y="352"/><di:waypoint x="160" y="392"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F16_CikisKontrol_EndTamam" bpmnElement="F16_CikisKontrol_EndTamam"><di:waypoint x="668" y="420"/><di:waypoint x="872" y="420"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F17_SubeyeIade_IadeSonrasi" bpmnElement="F17_SubeyeIade_IadeSonrasi"><di:waypoint x="567" y="600"/><di:waypoint x="613" y="600"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F18_IadeSonrasi_Dongu" bpmnElement="F18_IadeSonrasi_Dongu"><di:waypoint x="690" y="651"/><di:waypoint x="690" y="691"/><di:waypoint x="160" y="691"/><di:waypoint x="160" y="448"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship type="BPSimData"><bpmn2:extensionElements><bpsim:BPSimData><bpsim:Scenario id="default" name="Simulationscenario"><bpsim:ScenarioParameters/></bpsim:Scenario></bpsim:BPSimData></bpmn2:extensionElements><bpmn2:source>_IH_DAB_TANZIM_FC_ENCLAVE</bpmn2:source><bpmn2:target>_IH_DAB_TANZIM_FC_ENCLAVE</bpmn2:target></bpmn2:relationship>
+</bpmn2:definitions>

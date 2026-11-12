@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+    IH_DAB_TANZIM_FC - Ihracat IBKBG Fircosoft Sureci
+    Avrasya Workflow tasarimindan BAMOE 8 (jBPM 7 / KIE Server) projesine donusum.
+
+    kie.version:
+      - Varsayilan: jBPM 7 community surumu (Maven Central'dan derlenebilsin diye).
+      - BAMOE 8 ortaminda: IBM BAMOE 8 Maven reposundaki surumu verin, ornek:
+          mvn clean install -Dkie.version=<BAMOE 8 kie surumu>
+        (BAMOE 8.0.x, RHPAM 7.13 / jBPM 7.67.x tabanlidir.)
+  -->
+  <groupId>com.garantibbva.processarchitecture</groupId>
+  <artifactId>ih-dab-tanzim-fc-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>IH_DAB_TANZIM_FC :: Parent</name>
+
+  <modules>
+    <module>ih-dab-tanzim-fc-handlers</module>
+    <module>ih-dab-tanzim-fc-kjar</module>
+    
+  </modules>
+
+  <profiles>
+    <!--
+      Maven Central ile derleme (varsayilan). KIE 7 community POM'lari bazi artefaktlari
+      yalnizca JBoss reposunda bulunan ".redhat" surumleriyle ister; burada Central'daki
+      esdegerlerine eslenir. BAMOE 8 / IBM reposu ile derlerken -Dbamoe verin; bu profil
+      devre disi kalir ve BAMOE'nin kendi (yamali) surumleri kullanilir.
+    -->
+    <profile>
+      <id>maven-central</id>
+      <activation>
+        <property>
+          <name>!bamoe</name>
+        </property>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency><groupId>org.codehaus.jackson</groupId><artifactId>jackson-core-asl</artifactId><version>1.9.13</version></dependency>
+          <dependency><groupId>org.codehaus.jackson</groupId><artifactId>jackson-mapper-asl</artifactId><version>1.9.13</version></dependency>
+          <dependency><groupId>org.codehaus.jackson</groupId><artifactId>jackson-jaxrs</artifactId><version>1.9.13</version></dependency>
+          <dependency><groupId>org.codehaus.jackson</groupId><artifactId>jackson-xc</artifactId><version>1.9.13</version></dependency>
+          <dependency><groupId>xmlpull</groupId><artifactId>xmlpull</artifactId><version>1.1.3.1</version></dependency>
+          <dependency><groupId>xerces</groupId><artifactId>xercesImpl</artifactId><version>2.12.2</version></dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+    <!-- Spring Boot KIE Server uygulamasi: mvn install -Pservice -->
+    <profile>
+      <id>service</id>
+      <modules>
+        <module>ih-dab-tanzim-fc-service</module>
+      </modules>
+    </profile>
+  </profiles>
+
+  <properties>
+    <kie.version>7.74.1.Final</kie.version>
+    <maven.compiler.release>11</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- KIE 7.74 (kie-parent) ile ayni Jackson surumu; tum jackson modulleri BOM ile hizalanir -->
+    <jackson.version>2.15.0</jackson.version>
+    <junit.version>4.13.2</junit.version>
+    <h2.version>1.4.197</h2.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-api</artifactId>
+        <version>${kie.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-flow</artifactId>
+        <version>${kie.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-test</artifactId>
+        <version>${kie.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.36</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>${h2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.garantibbva.processarchitecture</groupId>
+        <artifactId>ih-dab-tanzim-fc-handlers</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.garantibbva.processarchitecture</groupId>
+        <artifactId>ih-dab-tanzim-fc-kjar</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.11.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.kie</groupId>
+          <artifactId>kie-maven-plugin</artifactId>
+          <version>${kie.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

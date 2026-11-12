@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.garantibbva.processarchitecture</groupId>
+    <artifactId>ih-dab-tanzim-fc-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>ih-dab-tanzim-fc-service</artifactId>
+  <name>IH_DAB_TANZIM_FC :: Service (Spring Boot KIE Server)</name>
+  <description>kjar'i calistiran Spring Boot KIE Server + entegrasyon REST uclari.</description>
+
+  <properties>
+    <!-- KIE 7.74 / BAMOE 8 ile uyumlu Spring Boot surumu (kie-parent: version.org.springframework.boot) -->
+    <spring-boot.version>2.5.15</spring-boot.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-server-spring-boot-starter-jbpm</artifactId>
+      <version>${kie.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <!-- kjar classpath'te: kieserver.classPathContainer=true ile Maven reposu gerekmeden deploy edilir -->
+    <dependency>
+      <groupId>com.garantibbva.processarchitecture</groupId>
+      <artifactId>ih-dab-tanzim-fc-kjar</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.garantibbva.processarchitecture</groupId>
+      <artifactId>ih-dab-tanzim-fc-handlers</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <!-- Yalnizca @...@ filtrelenir; Spring'in ${...} yer tutuculari oldugu gibi kalir -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <useDefaultDelimiters>false</useDefaultDelimiters>
+          <delimiters>
+            <delimiter>@</delimiter>
+          </delimiters>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring-boot.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

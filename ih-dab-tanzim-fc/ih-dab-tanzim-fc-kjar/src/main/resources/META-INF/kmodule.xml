@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns="http://www.drools.org/xsd/kmodule" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <kbase name="ihDabTanzimFcKBase" default="true" eventProcessingMode="stream" equalsBehavior="identity"
+         packages="com.garantibbva.processarchitecture.ihdabtanzimfc">
+    <ksession name="ihDabTanzimFcKSession" type="stateful" default="true" clockType="realtime"/>
+  </kbase>
+</kmodule>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd http://www.omg.org/spec/DD/20100524/DC DC.xsd http://www.omg.org/spec/DD/20100524/DI DI.xsd " id="_IH_DAB_TANZIM_FC_FIRCOSOFT" exporter="jBPM Process Modeler" exporterVersion="2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:itemDefinition id="_exportAllItem" structureRef="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll"/>
+  <bpmn2:itemDefinition id="_StringItem" structureRef="String"/>
+  <bpmn2:process id="IH_DAB_TANZIM_FC.FIRCOSOFT" drools:packageName="com.garantibbva.processarchitecture.ihdabtanzimfc" drools:version="1.0" drools:adHoc="false" name="Fircosoft" isExecutable="true" processType="Public">
+    <bpmn2:documentation><![CDATA[Avrasya 'Fircosoft' blogu: TIMEOUT (ileri valor), FIRCO, UYUM, PROCESS. NOT: Kaynak XML bu blogun ortasinda kesik; UYUM/PROCESS ve baglanti kosullari varsayimdir (bkz. docs).]]></bpmn2:documentation>
+    <bpmn2:extensionElements>
+      <drools:import name="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll"/>
+      <drools:import name="com.garantibbva.processarchitecture.ihdabtanzimfc.surec.Surec"/>
+    </bpmn2:extensionElements>
+    <bpmn2:property id="exportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+    <bpmn2:property id="serviceError" itemSubjectRef="_StringItem" name="serviceError"/>
+    <bpmn2:property id="uAction" itemSubjectRef="_StringItem" name="uAction"/>
+    <bpmn2:property id="uRework" itemSubjectRef="_StringItem" name="uRework"/>
+    <bpmn2:property id="uKuyrukAdi" itemSubjectRef="_StringItem" name="uKuyrukAdi"/>
+    <bpmn2:property id="uReturnCode" itemSubjectRef="_StringItem" name="uReturnCode"/>
+    <bpmn2:property id="uHataKarar" itemSubjectRef="_StringItem" name="uHataKarar"/>
+    <bpmn2:startEvent id="Start" name="Start">
+      <bpmn2:outgoing>F1_Start_IleriValor</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:exclusiveGateway id="IleriValor" name="Ileri Valor?" gatewayDirection="Diverging" default="F3_IleriValor_FircoGiris">
+      <bpmn2:incoming>F1_Start_IleriValor</bpmn2:incoming>
+      <bpmn2:outgoing>F2_IleriValor_Timeout</bpmn2:outgoing>
+      <bpmn2:outgoing>F3_IleriValor_FircoGiris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="Timeout" name="TIMEOUT">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[TIMEOUT]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+e.getQue().setQDeterminePortfolio(Surec.birlestir(e.getQue().getQPortfoyAdi(), e.getQue().getQIleriValor()));
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F2_IleriValor_Timeout</bpmn2:incoming>
+      <bpmn2:outgoing>F4_Timeout_FircoGiris</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Timeout_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Timeout_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="Timeout_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="Timeout_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="Timeout_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="Timeout_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="Timeout_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="Timeout_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="Timeout_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="Timeout_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Timeout_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Timeout_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Timeout_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Timeout_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Timeout_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Timeout_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Timeout_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Timeout_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Timeout_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Timeout_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Timeout_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[FircoTimeout]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Timeout_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Timeout_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[TIMEOUT]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Timeout_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Timeout_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_1361]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Timeout_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Timeout_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Timeout_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Timeout_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[TIMEOUT - ileri valorlu islem bekleme (WorkQueue 1361)]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Timeout_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Timeout_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Timeout_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Timeout_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Timeout_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Timeout_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="FircoGiris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F3_IleriValor_FircoGiris</bpmn2:incoming>
+      <bpmn2:incoming>F4_Timeout_FircoGiris</bpmn2:incoming>
+      <bpmn2:outgoing>F5_FircoGiris_Firco</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="Firco" name="FIRCO">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[FIRCO]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+e.getQue().setQDeterminePortfolio(Surec.birlestir(e.getQue().getQPortfoyAdi(), e.getQue().getQIleriValor()));
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F5_FircoGiris_Firco</bpmn2:incoming>
+      <bpmn2:outgoing>F6_Firco_FircoKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Firco_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Firco_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="Firco_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="Firco_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="Firco_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="Firco_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="Firco_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="Firco_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="Firco_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="Firco_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Firco_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Firco_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Firco_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Firco_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Firco_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Firco_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Firco_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Firco_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Firco_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Firco_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Firco_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Firco]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Firco_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Firco_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[FIRCO]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Firco_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Firco_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[#{exportAll.que.qDeterminePortfolio}]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Firco_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Firco_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Firco_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Firco_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[FIRCO - Fircosoft tarama sonucu bekleniyor]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Firco_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Firco_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Firco_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Firco_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Firco_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Firco_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="FircoKarar" name="Firco Sonucu" gatewayDirection="Diverging" default="F9_FircoKarar_ProcessGiris">
+      <bpmn2:incoming>F6_Firco_FircoKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F7_FircoKarar_FircoCikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F8_FircoKarar_Uyum</bpmn2:outgoing>
+      <bpmn2:outgoing>F9_FircoKarar_ProcessGiris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:scriptTask id="FircoCikis" name="Iade / Iptal Isaretle" scriptFormat="http://www.java.com/java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade / Iptal Isaretle]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F7_FircoKarar_FircoCikis</bpmn2:incoming>
+      <bpmn2:outgoing>F10_FircoCikis_EndFircoCikis</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.cikisIsaretle(e, kcontext);]]></bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:endEvent id="EndFircoCikis" name="Iade / Iptal">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade / Iptal]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F10_FircoCikis_EndFircoCikis</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:userTask id="Uyum" name="UYUM">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[UYUM]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F8_FircoKarar_Uyum</bpmn2:incoming>
+      <bpmn2:outgoing>F11_Uyum_UyumKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Uyum_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Uyum_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="Uyum_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="Uyum_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="Uyum_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="Uyum_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="Uyum_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="Uyum_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="Uyum_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="Uyum_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Uyum_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Uyum_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Uyum_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Uyum_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Uyum_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Uyum_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Uyum_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Uyum_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Uyum_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Uyum_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Uyum_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[FircoUyum]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Uyum_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Uyum_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[UYUM]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Uyum_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Uyum_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_UYUM]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Uyum_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Uyum_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Uyum_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Uyum_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[UYUM - Fircosoft eslesmesi uyum incelemesi]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Uyum_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Uyum_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Uyum_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Uyum_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Uyum_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Uyum_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="UyumKarar" name="Uyum Karari" gatewayDirection="Diverging" default="F13_UyumKarar_ProcessGiris">
+      <bpmn2:incoming>F11_Uyum_UyumKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F12_UyumKarar_UyumCikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F13_UyumKarar_ProcessGiris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:scriptTask id="UyumCikis" name="Iade / Iptal Isaretle" scriptFormat="http://www.java.com/java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade / Iptal Isaretle]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F12_UyumKarar_UyumCikis</bpmn2:incoming>
+      <bpmn2:outgoing>F14_UyumCikis_EndUyumCikis</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.cikisIsaretle(e, kcontext);]]></bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:endEvent id="EndUyumCikis" name="Iade / Iptal">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Iade / Iptal]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F14_UyumCikis_EndUyumCikis</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:exclusiveGateway id="ProcessGiris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F9_FircoKarar_ProcessGiris</bpmn2:incoming>
+      <bpmn2:incoming>F13_UyumKarar_ProcessGiris</bpmn2:incoming>
+      <bpmn2:outgoing>F15_ProcessGiris_Process</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="Process" name="PROCESS">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[PROCESS]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevHazirla(kcontext);
+kcontext.setVariable("exportAll", e);]]></drools:script></drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[ExportAll e = ((ExportAll) kcontext.getVariable("exportAll")).ensureInitialized();
+Surec.gorevUygula(e, kcontext);]]></drools:script></drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F15_ProcessGiris_Process</bpmn2:incoming>
+      <bpmn2:outgoing>F16_Process_End</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="Process_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="Process_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="Process_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="Process_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="Process_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="Process_exportAllInputX" drools:dtype="com.garantibbva.processarchitecture.ihdabtanzimfc.model.ExportAll" itemSubjectRef="_exportAllItem" name="exportAll"/>
+        <bpmn2:dataOutput id="Process_actionOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="action"/>
+        <bpmn2:dataOutput id="Process_reworkOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="rework"/>
+        <bpmn2:dataOutput id="Process_kuyrukAdiOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="kuyrukAdi"/>
+        <bpmn2:dataOutput id="Process_returnCodeOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="returnCode"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>Process_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Process_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Process_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Process_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Process_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Process_exportAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>Process_actionOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Process_reworkOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Process_kuyrukAdiOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Process_returnCodeOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Process_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[FircoProcess]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Process_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Process_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[PROCESS]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Process_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Process_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[#{exportAll.que.qDeterminePortfolio}]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Process_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Process_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Process_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>Process_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[PROCESS - Firco sonrasi islem devami]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[Process_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>exportAll</bpmn2:sourceRef><bpmn2:targetRef>Process_exportAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Process_actionOutputX</bpmn2:sourceRef><bpmn2:targetRef>uAction</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Process_reworkOutputX</bpmn2:sourceRef><bpmn2:targetRef>uRework</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Process_kuyrukAdiOutputX</bpmn2:sourceRef><bpmn2:targetRef>uKuyrukAdi</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>Process_returnCodeOutputX</bpmn2:sourceRef><bpmn2:targetRef>uReturnCode</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:endEvent id="End" name="End">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[End]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F16_Process_End</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="F1_Start_IleriValor" sourceRef="Start" targetRef="IleriValor"/>
+    <bpmn2:sequenceFlow id="F2_IleriValor_Timeout" sourceRef="IleriValor" targetRef="Timeout" name="qIleriValor dolu">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[qIleriValor dolu]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return !Surec.bos(((ExportAll) kcontext.getVariable("exportAll")).getQue().getQIleriValor());]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F3_IleriValor_FircoGiris" sourceRef="IleriValor" targetRef="FircoGiris" name="Hayir"/>
+    <bpmn2:sequenceFlow id="F4_Timeout_FircoGiris" sourceRef="Timeout" targetRef="FircoGiris"/>
+    <bpmn2:sequenceFlow id="F5_FircoGiris_Firco" sourceRef="FircoGiris" targetRef="Firco"/>
+    <bpmn2:sequenceFlow id="F6_Firco_FircoKarar" sourceRef="Firco" targetRef="FircoKarar"/>
+    <bpmn2:sequenceFlow id="F7_FircoKarar_FircoCikis" sourceRef="FircoKarar" targetRef="FircoCikis" name="IADE / IPTAL" drools:priority="1">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[IADE / IPTAL]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.cikisIstendi(((ExportAll) kcontext.getVariable("exportAll")));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F8_FircoKarar_Uyum" sourceRef="FircoKarar" targetRef="Uyum" name="UYUM" drools:priority="2">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[UYUM]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.karar(((ExportAll) kcontext.getVariable("exportAll")), Surec.UYUM);]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F9_FircoKarar_ProcessGiris" sourceRef="FircoKarar" targetRef="ProcessGiris" name="Temiz"/>
+    <bpmn2:sequenceFlow id="F10_FircoCikis_EndFircoCikis" sourceRef="FircoCikis" targetRef="EndFircoCikis"/>
+    <bpmn2:sequenceFlow id="F11_Uyum_UyumKarar" sourceRef="Uyum" targetRef="UyumKarar"/>
+    <bpmn2:sequenceFlow id="F12_UyumKarar_UyumCikis" sourceRef="UyumKarar" targetRef="UyumCikis" name="IADE / IPTAL">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[IADE / IPTAL]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.cikisIstendi(((ExportAll) kcontext.getVariable("exportAll")));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F13_UyumKarar_ProcessGiris" sourceRef="UyumKarar" targetRef="ProcessGiris" name="ONAY"/>
+    <bpmn2:sequenceFlow id="F14_UyumCikis_EndUyumCikis" sourceRef="UyumCikis" targetRef="EndUyumCikis"/>
+    <bpmn2:sequenceFlow id="F15_ProcessGiris_Process" sourceRef="ProcessGiris" targetRef="Process"/>
+    <bpmn2:sequenceFlow id="F16_Process_End" sourceRef="Process" targetRef="End"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="diagram_IH_DAB_TANZIM_FC_FIRCOSOFT">
+    <bpmndi:BPMNPlane id="plane_IH_DAB_TANZIM_FC_FIRCOSOFT" bpmnElement="IH_DAB_TANZIM_FC.FIRCOSOFT">
+      <bpmndi:BPMNShape id="shape_Start" bpmnElement="Start"><dc:Bounds height="56" width="56" x="32" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_IleriValor" bpmnElement="IleriValor"><dc:Bounds height="56" width="56" x="132" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Timeout" bpmnElement="Timeout"><dc:Bounds height="102" width="154" x="223" y="379"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_FircoGiris" bpmnElement="FircoGiris"><dc:Bounds height="56" width="56" x="412" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Firco" bpmnElement="Firco"><dc:Bounds height="102" width="154" x="493" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_FircoKarar" bpmnElement="FircoKarar"><dc:Bounds height="56" width="56" x="682" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_FircoCikis" bpmnElement="FircoCikis"><dc:Bounds height="102" width="154" x="633" y="39"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_EndFircoCikis" bpmnElement="EndFircoCikis"><dc:Bounds height="56" width="56" x="842" y="62"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Uyum" bpmnElement="Uyum"><dc:Bounds height="102" width="154" x="773" y="379"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_UyumKarar" bpmnElement="UyumKarar"><dc:Bounds height="56" width="56" x="962" y="402"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_UyumCikis" bpmnElement="UyumCikis"><dc:Bounds height="102" width="154" x="913" y="549"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_EndUyumCikis" bpmnElement="EndUyumCikis"><dc:Bounds height="56" width="56" x="1122" y="572"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ProcessGiris" bpmnElement="ProcessGiris"><dc:Bounds height="56" width="56" x="962" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_Process" bpmnElement="Process"><dc:Bounds height="102" width="154" x="1043" y="209"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_End" bpmnElement="End"><dc:Bounds height="56" width="56" x="1242" y="232"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_F1_Start_IleriValor" bpmnElement="F1_Start_IleriValor"><di:waypoint x="88" y="260"/><di:waypoint x="132" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F2_IleriValor_Timeout" bpmnElement="F2_IleriValor_Timeout"><di:waypoint x="160" y="288"/><di:waypoint x="160" y="430"/><di:waypoint x="223" y="430"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F3_IleriValor_FircoGiris" bpmnElement="F3_IleriValor_FircoGiris"><di:waypoint x="188" y="260"/><di:waypoint x="412" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F4_Timeout_FircoGiris" bpmnElement="F4_Timeout_FircoGiris"><di:waypoint x="377" y="430"/><di:waypoint x="440" y="430"/><di:waypoint x="440" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F5_FircoGiris_Firco" bpmnElement="F5_FircoGiris_Firco"><di:waypoint x="468" y="260"/><di:waypoint x="493" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F6_Firco_FircoKarar" bpmnElement="F6_Firco_FircoKarar"><di:waypoint x="647" y="260"/><di:waypoint x="682" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F7_FircoKarar_FircoCikis" bpmnElement="F7_FircoKarar_FircoCikis"><di:waypoint x="710" y="232"/><di:waypoint x="710" y="141"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F8_FircoKarar_Uyum" bpmnElement="F8_FircoKarar_Uyum"><di:waypoint x="710" y="288"/><di:waypoint x="710" y="430"/><di:waypoint x="773" y="430"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F9_FircoKarar_ProcessGiris" bpmnElement="F9_FircoKarar_ProcessGiris"><di:waypoint x="738" y="260"/><di:waypoint x="962" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F10_FircoCikis_EndFircoCikis" bpmnElement="F10_FircoCikis_EndFircoCikis"><di:waypoint x="787" y="90"/><di:waypoint x="842" y="90"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F11_Uyum_UyumKarar" bpmnElement="F11_Uyum_UyumKarar"><di:waypoint x="927" y="430"/><di:waypoint x="962" y="430"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F12_UyumKarar_UyumCikis" bpmnElement="F12_UyumKarar_UyumCikis"><di:waypoint x="990" y="458"/><di:waypoint x="990" y="549"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F13_UyumKarar_ProcessGiris" bpmnElement="F13_UyumKarar_ProcessGiris"><di:waypoint x="990" y="402"/><di:waypoint x="990" y="288"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F14_UyumCikis_EndUyumCikis" bpmnElement="F14_UyumCikis_EndUyumCikis"><di:waypoint x="1067" y="600"/><di:waypoint x="1122" y="600"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F15_ProcessGiris_Process" bpmnElement="F15_ProcessGiris_Process"><di:waypoint x="1018" y="260"/><di:waypoint x="1043" y="260"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F16_Process_End" bpmnElement="F16_Process_End"><di:waypoint x="1197" y="260"/><di:waypoint x="1242" y="260"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship type="BPSimData"><bpmn2:extensionElements><bpsim:BPSimData><bpsim:Scenario id="default" name="Simulationscenario"><bpsim:ScenarioParameters/></bpsim:Scenario></bpsim:BPSimData></bpmn2:extensionElements><bpmn2:source>_IH_DAB_TANZIM_FC_FIRCOSOFT</bpmn2:source><bpmn2:target>_IH_DAB_TANZIM_FC_FIRCOSOFT</bpmn2:target></bpmn2:relationship>
+</bpmn2:definitions>
