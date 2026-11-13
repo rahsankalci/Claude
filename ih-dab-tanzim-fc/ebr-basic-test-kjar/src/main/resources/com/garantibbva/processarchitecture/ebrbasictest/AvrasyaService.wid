@@ -1,0 +1,19 @@
+[
+  [
+    "name" : "AvrasyaService",
+    "displayName" : "Avrasya Servis",
+    "category" : "EBR_BASIC_TEST",
+    "description" : "Avrasya ProgramID servisini REST ile cagirir (bkz. AvrasyaServiceWorkItemHandler)",
+    "parameters" : [
+      "ProgramID" : new StringDataType(),
+      "ActivityName" : new StringDataType(),
+      "Data" : new ObjectDataType("com.garantibbva.processarchitecture.ebrbasictest.model.GkAll")
+    ],
+    "results" : [
+      "Data" : new ObjectDataType("com.garantibbva.processarchitecture.ebrbasictest.model.GkAll"),
+      "ServiceError" : new StringDataType()
+    ],
+    "defaultHandler" : "mvel: new com.garantibbva.processarchitecture.ihdabtanzimfc.handler.AvrasyaServiceWorkItemHandler()",
+    "icon" : "defaultservicenodeicon.png"
+  ]
+]

@@ -5,6 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Base64;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,10 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -37,8 +46,19 @@ class IhDabTanzimFcServiceTest {
     private static final List<String> CAGRILAR = Collections.synchronizedList(new ArrayList<>());
     private static final HttpServer AVRASYA = stub();
 
+    /** Mainframe'in BPM geri donus ucuna verdigi son HTTP durum kodu. */
+    private static final AtomicInteger GERI_DONUS_HTTP = new AtomicInteger();
+
     @Autowired
     private TestRestTemplate rest;
+
+    @LocalServerPort
+    private int port;
+
+    @BeforeEach
+    void geriDonusAdresi() {
+        System.setProperty("avrasya.service.callback-url", "http://127.0.0.1:" + port + "/api/avrasya/geri-donus");
+    }
 
     /** Avrasya servis stub'i: konteyneri basari kodlariyla geri dondurur. */
     private static HttpServer stub() {
@@ -49,8 +69,18 @@ class IhDabTanzimFcServiceTest {
                 String program = req.get("programId").asText();
                 CAGRILAR.add(program);
                 ObjectNode data = (ObjectNode) req.get("data");
-                ObjectNode wip = (ObjectNode) data.get("sExport_sWIP");
-                if ("116093".equals(program)) {
+                if ("269812".equals(program)) {
+                    // WebClient: mainframe istegi kabul eder (202), isi sonra bitirip BPM'e doner
+                    String callback = req.get("callbackUrl").asText();
+                    ex.sendResponseHeaders(202, -1);
+                    ex.close();
+                    data.putObject("sGK_sOUT").put("mf_sonuc", "OK");
+                    CompletableFuture.runAsync(() -> mainframeGeriDonus(callback, data));
+                    return;
+                }
+                // IH_DAB_TANZIM_FC: sExport_sALL/sExport_sWIP, EBR_BASIC_TEST: sGK_sALL/sGK_sWIP
+                ObjectNode wip = (ObjectNode) (data.has("sGK_sWIP") ? data.get("sGK_sWIP") : data.get("sExport_sWIP"));
+                if ("116093".equals(program) || "54866".equals(program)) {
                     wip.put("status_code", "0");
                 } else {
                     wip.put("return_code", "00");
@@ -66,6 +96,20 @@ class IhDabTanzimFcServiceTest {
             return s;
         } catch (Exception e) {
             throw new IllegalStateException(e);
+        }
+    }
+
+    private static void mainframeGeriDonus(String callback, ObjectNode data) {
+        try {
+            Thread.sleep(300);
+            HttpRequest r = HttpRequest.newBuilder(URI.create(callback))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("mainframe:mainframe".getBytes()))
+                    .POST(HttpRequest.BodyPublishers.ofString(M.writeValueAsString(Map.of("data", data))))
+                    .build();
+            GERI_DONUS_HTTP.set(HttpClient.newHttpClient().send(r, HttpResponse.BodyHandlers.ofString()).statusCode());
+        } catch (Exception e) {
+            GERI_DONUS_HTTP.set(-1);
         }
     }
 
@@ -100,6 +144,7 @@ class IhDabTanzimFcServiceTest {
 
     @Test
     void uctanUcaRestIleSurec() throws Exception {
+        CAGRILAR.clear();
         String govde = "{\"sExport_sWID\":{\"job_req_unit_num\":\"1234\",\"job_req_cust_num\":\"98765\","
                 + "\"job_req_doc_code\":\"IHR\",\"job_req_seq_num\":\"7\"},"
                 + "\"sExport_sQUE\":{\"qPortfoyAdi\":\"PRT\",\"qYetkiliOnay\":\"_YO\",\"qYarim\":\"_SB\",\"qIleriValor\":\"\"}}";
@@ -121,7 +166,33 @@ class IhDabTanzimFcServiceTest {
         tamamla("PROCESS", Map.of());
 
         assertEquals("COMPLETED", durum().get("state").asText());
-        assertEquals(List.of("116093", "116092", "116092", "116095", "179348", "116095"), CAGRILAR);
+        assertEquals(List.of("116093", "116092", "116092", "116095", "179348", "116095"),
+                CAGRILAR.subList(CAGRILAR.size() - 6, CAGRILAR.size()));
+    }
+
+    @Test
+    void ebrBasicTest_MainframeeGidipBpmeGeriDoner() throws Exception {
+        CAGRILAR.clear();
+        ResponseEntity<String> start = as("entegrasyon").postForEntity("/api/ebr-basic-test/surecler",
+                Map.of("sGK_sWID", Map.of("musteri_no", "98765")), String.class);
+        assertEquals(HttpStatus.CREATED, start.getStatusCode(), start.getBody());
+        long pid = M.readTree(start.getBody()).get("processInstanceId").asLong();
+
+        String state = "";
+        for (int i = 0; i < 50 && !"COMPLETED".equals(state); i++) {
+            Thread.sleep(200);
+            state = M.readTree(as("entegrasyon").getForEntity("/api/ebr-basic-test/surecler/" + pid, String.class)
+                    .getBody()).get("state").asText();
+        }
+        assertEquals(200, GERI_DONUS_HTTP.get(), "mainframe geri donusu kabul edilmeli");
+        assertEquals("COMPLETED", state);
+        assertEquals(List.of("54866", "269812"), CAGRILAR);
+    }
+
+    @Test
+    void geriDonusUcuYalnizcaMainframeKullanicisina() {
+        ResponseEntity<String> r = as("entegrasyon").postForEntity("/api/avrasya/geri-donus/1/1", Map.of("data", Map.of()), String.class);
+        assertEquals(HttpStatus.FORBIDDEN, r.getStatusCode());
     }
 
     @Test

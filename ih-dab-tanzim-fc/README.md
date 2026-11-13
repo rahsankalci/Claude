@@ -1,6 +1,11 @@
-# IH_DAB_TANZIM_FC — İhracat IBKBG Fircosoft Süreci (BAMOE 8)
+# Avrasya → BAMOE 8 (KIE) Süreçleri — Java 21
 
-Avrasya Workflow tasarımı `IH_DAB_TANZIM_FC` (ACLID 11777, CategoryID 116042), BAMOE 8 / jBPM 7 (KIE Server) üzerinde çalışan bir sürece dönüştürüldü. Otomatik aktivitelerin (ProgramID) servis entegrasyonu da yapıldı.
+Avrasya Workflow tasarımları BAMOE 8 / jBPM 7 (KIE Server) üzerinde **Java 21** ile çalışan süreçlere dönüştürüldü. Otomatik aktivitelerin (ProgramID) servis entegrasyonu yapıldı. Mainframe'e gidip BPM'e geri dönen asenkron akış da çalışır durumda.
+
+| Süreç | Kaynak | Akış |
+|---|---|---|
+| `IH_DAB_TANZIM_FC` | `docs/kaynak/IH_DAB_TANZIM_FC.avrasya.xml` (ACLID 11777) | İhracat IBKBG Fircosoft süreci (aşağıda) |
+| `EBR_BASIC_TEST` | `docs/kaynak/EBR_BASIC_TEST.avrasya.xml` (ACLID 11566) | Start → Referans Process Aciklama Ekle (54866) → **WebClient (269812): mainframe'e gider, BPM'e geri döner** → End |
 
 > ⚠️ **Kaynak XML kesik.** Yüklenen dosya (67 KB) `Fircosoft` bloğunun ortasında bitiyor (`DestinationNodeName="sExport_sALL/s`).
 > `UYUM` ve `PROCESS` aktiviteleri ile blokların çoğundaki `<AllConnections>` (geçiş koşulları) dosyada yok.
@@ -14,7 +19,28 @@ Avrasya Workflow tasarımı `IH_DAB_TANZIM_FC` (ACLID 11777, CategoryID 116042),
 |---|---|
 | `ih-dab-tanzim-fc-handlers` | `AvrasyaServiceWorkItemHandler`: Avrasya ProgramID servislerini REST/JSON ile çağırır |
 | `ih-dab-tanzim-fc-kjar` | 5 BPMN süreci, `sExport_sALL` veri modeli, `kie-deployment-descriptor.xml`, uçtan uca testler |
-| `ih-dab-tanzim-fc-service` | Spring Boot KIE Server (BAMOE 8 çalışma zamanı) ve entegrasyon REST uçları; OpenShift profili, Dockerfile |
+| `ebr-basic-test-kjar` | `EBR_BASIC_TEST` BPMN'i, `sGK_sALL` modeli (bilinmeyen düğümler aynen korunur), testler |
+| `ih-dab-tanzim-fc-service` | Spring Boot KIE Server (BAMOE 8 çalışma zamanı): iki container, entegrasyon REST uçları, **mainframe geri dönüş ucu**; OpenShift profili, Dockerfile |
+| `avrasya-mainframe-gateway` | BPM'in program çağrılarını mainframe'e (z/OS Connect / CICS) iletir; asenkron programlarda sonucu BPM'e geri döndürür; geliştirme için simülatör içerir |
+
+## Mainframe'e gidip BPM'e geri dönüş (EBR_BASIC_TEST / WebClient)
+
+```
+ BPM (KIE)                               Mainframe Gateway                   Mainframe
+ ─────────                               ─────────────────                   ─────────
+ Referans Process Aciklama Ekle ──POST /avrasya/54866──▶ senkron ──────────▶ program 54866
+            ◀────────────── 200 {"data":{sGK_sWIP.status_code:"0"}} ◀──────┘
+ WebClient ─────POST /avrasya/269812 (callbackUrl=.../geri-donus/{pid}/{wid})──▶
+            ◀── 202 Accepted          (work item AÇIK, süreç DB'de bekler)
+                                         arka planda ──────────────────────▶ program 269812
+ /api/avrasya/geri-donus/{pid}/{wid} ◀── POST {"data":{...}} | {"serviceError":"..."}
+   → work item tamamlanır → End          (Basic auth: 'mainframe' yetkisi)
+```
+- **BPM tarafı.** Program `avrasya.service.program.269812.mode=async` olarak ayarlı. Servis `202` dönerse de asenkron sayılır. Handler work item'ı tamamlamaz; süreç güvenli bekleme noktasında DB'ye yazılır. Bu yüzden geri dönüş hangi pod'a gelirse gelsin süreç devam eder.
+- **Geri dönüş ucu.** `POST /api/avrasya/geri-donus/{processInstanceId}/{workItemId}` yalnızca `mainframe` (veya `admin`) yetkisiyle çağrılabilir. Gövde `{"data":{...}}` gelirse konteyner sürece yazılır. `{"serviceError":"..."}` gelirse iş, aktivitenin kuyruğundaki **Hata Kuyruğu** görevine düşer (WebClient için `WQ_1131`). Mainframe, work item'ı oluşturan transaction commit edilmeden dönerse uç kısa bir süre tekrar dener.
+- **Mainframe BPM'i doğrudan çağırıyorsa** (MQ köprüsü, CICS web client vb.) gateway'e gerek yok. Sözleşme aynı: istekteki `callbackUrl`'e sonucu POST etmesi yeterli.
+- **Gateway.** `gateway.connector=zos-connect` ile her program `gateway.programs.<id>.url` adresindeki z/OS Connect API'sine JSON olarak gider. Varsayılan `simulator` modu geliştirme içindir. Asenkron programlar `gateway.programs.<id>.mode=async` ile işaretlenir. Geri dönüş kimliği `GATEWAY_BPM_USERNAME` / `GATEWAY_BPM_PASSWORD` ile verilir.
+
 
 ## Süreç yapısı
 
@@ -127,16 +153,26 @@ curl -u entegrasyon:entegrasyon -H 'Content-Type: application/json' -d '{"action
 
 ## Derleme ve çalıştırma
 
-- **JDK 11 veya 17** gerekir. BAMOE 8'in desteklediği sürümler bunlar; jBPM 7'nin MVEL'i JDK 21'de çalışmıyor.
+- **JDK 21** ile derlenir ve çalışır (`maven.compiler.release=21`).
+  - jBPM 7'nin varsayılan `mvel2` 2.4.x sürümü JDK 21'de kaldırılan `java.lang.Compiler`'a bağlı (`NoClassDefFoundError`). Parent POM, `mvel2`'yi 2.5.2.Final'a zorluyor; `kie-maven-plugin`'in kendi bağımlılığında da aynı override var.
+  - Kalan yığın JDK 21'de testlerle doğrulandı: kjar derleme, Java dialect script'leri, H2/Hibernate kalıcılığı, Spring Boot 2.5 + KIE Server.
+  - Spring Boot 2.5, Java 21'i resmi olarak listelemiyor. Kurum içi BAMOE 8 sürümünüzün JDK 21 destek beyanını ayrıca kontrol edin.
 
 ```bash
 # kjar + handler'lar (BAMOE Business Central / KIE Server'a deploy için)
 mvn clean install
 
-# Spring Boot KIE Server dahil
+# Spring Boot KIE Server + Mainframe Gateway dahil
 mvn clean install -Pservice
-java -jar ih-dab-tanzim-fc-service/target/ih-dab-tanzim-fc-service-1.0.0-SNAPSHOT.jar
+java -jar avrasya-mainframe-gateway/target/avrasya-mainframe-gateway-1.0.0-SNAPSHOT.jar        # :8091 (simülatör)
+java -jar ih-dab-tanzim-fc-service/target/ih-dab-tanzim-fc-service-1.0.0-SNAPSHOT.jar          # :8090
+
+# EBR_BASIC_TEST: başlat ve durumu izle
+curl -u entegrasyon:entegrasyon -H 'Content-Type: application/json' -d '{"sGK_sWID":{"musteri_no":"98765"}}' \
+  http://localhost:8090/api/ebr-basic-test/surecler
+curl -u entegrasyon:entegrasyon http://localhost:8090/api/ebr-basic-test/surecler/1
 ```
+- **İki kjar, tek uygulama.** İki kjar aynı classpath'te olduğu için container'lar `KieContainerTanimlari` sınıfında KBase/KSession seçimiyle tanımlı (`kieserver.deployments[n]` ile kbase seçilemiyor). Yeni bir Avrasya süreci eklemek için kjar'ı pom'a ve bu sınıfa eklemek yeterli.
 
 - **BAMOE 8 reposu ile derleme:** `mvn clean install -Dbamoe -Dkie.version=<BAMOE 8 kie sürümü>`. `-Dbamoe` verildiğinde `maven-central` profili kapanır; bu profil yalnızca JBoss reposundaki `.redhat` sürümlerini Central eşdeğerleriyle değiştiriyor.
   - Sadece Maven Central ile derlenecekse: `kie-maven-plugin` `xmlpull:xmlpull:1.2.0` istiyor ve bu sürüm Central'da yok. Bir kez `mvn install:install-file -Dfile=xmlpull-1.1.3.1.jar -DgroupId=xmlpull -DartifactId=xmlpull -Dversion=1.2.0 -Dpackaging=jar` çalıştırın.
@@ -145,12 +181,16 @@ java -jar ih-dab-tanzim-fc-service/target/ih-dab-tanzim-fc-service-1.0.0-SNAPSHO
   - `SPRING_PROFILES_ACTIVE=openshift` ile PostgreSQL bağlantısı (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`) ortam değişkenlerinden okunur. Pod başına `narayana.transaction-manager-id=${HOSTNAME}` ayarlanır ve jBPM executor açılır.
   - Runtime strategy `PER_PROCESS_INSTANCE`; pod'lar arasında JVM-yerel durum tutulmuyor.
   - Üretimde şemayı BAMOE DDL script'leriyle oluşturun (`HBM2DDL=validate`) ve kurumsal kimlik sağlayıcıyı (LDAP/OIDC) bağlayın. Geliştirme kullanıcıları (`wbadmin`, `entegrasyon`, `ali`) yalnızca `openshift` dışındaki profillerde tanımlı.
-  - `ih-dab-tanzim-fc-service/Dockerfile` UBI8 OpenJDK 17 imajını kullanır.
+  - Mainframe geri dönüş adresi `AVRASYA_SERVICE_CALLBACK_URL` ile verilir; pod adresi değil, Service/Route adresi olmalı.
+  - Geri dönüş ucunu çağıran teknik kullanıcıya kimlik sağlayıcıda `mainframe` yetkisi verilmeli.
+  - Her iki uygulamanın Dockerfile'ı UBI9 OpenJDK 21 imajını kullanır.
 
 ## Testler
 
 | Test | Kapsam |
 |---|---|
-| `AvrasyaServiceWorkItemHandlerTest` (5) | Gerçek HTTP stub'ına karşı handler: başarı, düz yanıt, HTTP 500, tanımsız program, ortam değişkeni adları |
+| `AvrasyaServiceWorkItemHandlerTest` (7) | Gerçek HTTP stub'ına karşı handler: başarı, düz yanıt, HTTP 500, tanımsız program, ortam değişkeni adları, `202` ile asenkron bekleme (`callbackUrl` gönderilir), `mode=async` |
 | `IhDabTanzimFcProcessTest` (9) | jBPM + H2 kalıcılık + gerçek task servisiyle senaryolar: mutlu yol, şubeye iade sonrası iptal, yetkili iadesi, rework döngüsü, portföy boş / ErtesiGun, ileri valör + UYUM, UYUM iptal, servis hatası → Tekrar Dene, servis hatası → Atla. Her görevin doğru kuyruğa düştüğü de doğrulanır |
-| `IhDabTanzimFcServiceTest` (2) | Spring Boot KIE Server ayağa kalkar; süreç REST ile başlatılır; servisler gerçek HTTP handler ile stub'a gider; tüm görevler entegrasyon ucuyla tamamlanır; süreç `COMPLETED` olur |
+| `EbrBasicTestProcessTest` (3) | WebClient mainframe'de beklerken süreç aktif kalır, geri dönüşle tamamlanır; mainframe hatası → `WQ_1131` Hata Kuyruğu → Tekrar Dene; Referans `status_code != 0` → `WQ_585` |
+| `AvrasyaProgramControllerTest` (5) | Gateway: senkron program, asenkron program (`202`, ardından konteyner korunarak BPM'e geri dönüş), asenkron hata → `serviceError`, senkron hata → `502`, `callbackUrl` zorunluluğu |
+| `IhDabTanzimFcServiceTest` (4) | Spring Boot KIE Server ayağa kalkar; süreç REST ile başlatılır; servisler gerçek HTTP handler ile stub'a gider; tüm görevler entegrasyon ucuyla tamamlanır; süreç `COMPLETED` olur. Ayrıca EBR_BASIC_TEST gerçek HTTP ile mainframe'e gidip (`202`) geri dönüş ucuyla BPM'e dönüyor ve `COMPLETED` oluyor; geri dönüş ucu `mainframe` yetkisi olmayana `403` dönüyor |

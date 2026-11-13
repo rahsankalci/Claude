@@ -40,8 +40,16 @@ import org.slf4j.LoggerFactory;
  * "Hata Kuyrugu" insan gorevine duser (Tekrar Dene / Atla).
  *
  * <p>HTTP sozlesmesi: {@code POST <url>} govde:
- * <pre>{"programId":"116093","activityName":"...","processInstanceId":1,"workItemId":7,"data":{...}}</pre>
- * Yanit 2xx olmali; govde ya {@code {"data":{...}}} ya da dogrudan konteyner JSON'u.
+ * <pre>{"programId":"116093","activityName":"...","processInstanceId":1,"workItemId":7,
+ *  "callbackUrl":"http://bpm/api/avrasya/geri-donus/1/7","data":{...}}</pre>
+ * <ul>
+ *   <li><b>Senkron</b> (varsayilan): yanit 2xx; govde {@code {"data":{...}}} ya da dogrudan konteyner.</li>
+ *   <li><b>Asenkron</b> (mainframe'e gidip BPM'e geri donen programlar): servis {@code 202 Accepted}
+ *       doner (veya program {@code mode=async} ayarlidir). Work item tamamlanMAZ; surec
+ *       guvenli bekleme noktasinda DB'ye yazilir. Mainframe isi bitirince
+ *       {@code callbackUrl}'e {@code {"data":{...}}} (veya {@code {"serviceError":"..."}}) POST eder;
+ *       BPM work item'i tamamlar ve akis kaldigi yerden devam eder (herhangi bir pod'da).</li>
+ * </ul>
  */
 public class AvrasyaServiceWorkItemHandler implements WorkItemHandler {
 
@@ -54,6 +62,8 @@ public class AvrasyaServiceWorkItemHandler implements WorkItemHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AvrasyaServiceWorkItemHandler.class);
     private static final int MAX_ERROR_BODY = 500;
+    /** call() sonucu: istek asenkron kabul edildi. */
+    private static final Object ASYNC = new Object();
 
     private final AvrasyaServiceConfig config;
     private final HttpClient httpClient;
@@ -84,7 +94,13 @@ public class AvrasyaServiceWorkItemHandler implements WorkItemHandler {
         results.put(R_DATA, data);
         results.put(R_SERVICE_ERROR, null);
         try {
-            results.put(R_DATA, call(workItem, programId, activityName, data));
+            Object out = call(workItem, programId, activityName, data);
+            if (out == ASYNC) {
+                log.info("Avrasya servisi asenkron kabul edildi, geri donus bekleniyor :: pid={}, workItem={}, program={}, aktivite={}",
+                        workItem.getProcessInstanceId(), workItem.getId(), programId, activityName);
+                return; // work item acik kalir; geri donus ucu tamamlar
+            }
+            results.put(R_DATA, out);
             log.info("Avrasya servisi tamamlandi :: pid={}, program={}, aktivite={}",
                     workItem.getProcessInstanceId(), programId, activityName);
         } catch (Exception e) {
@@ -108,6 +124,10 @@ public class AvrasyaServiceWorkItemHandler implements WorkItemHandler {
         body.put("activityName", activityName);
         body.put("processInstanceId", workItem.getProcessInstanceId());
         body.put("workItemId", workItem.getId());
+        String cb = config.callbackUrl();
+        if (cb != null) {
+            body.put("callbackUrl", (cb.endsWith("/") ? cb : cb + "/") + workItem.getProcessInstanceId() + "/" + workItem.getId());
+        }
         body.put("data", data);
 
         HttpRequest.Builder req = HttpRequest.newBuilder(URI.create(config.resolveUrl(programId)))
@@ -126,6 +146,9 @@ public class AvrasyaServiceWorkItemHandler implements WorkItemHandler {
             String b = resp.body() == null ? "" : resp.body();
             throw new IllegalStateException("HTTP " + resp.statusCode() + " - "
                     + (b.length() > MAX_ERROR_BODY ? b.substring(0, MAX_ERROR_BODY) + "..." : b));
+        }
+        if (resp.statusCode() == 202 || config.isAsync(programId)) {
+            return ASYNC;
         }
         if (resp.body() == null || resp.body().isBlank()) {
             return data; // servis govde donmediyse konteyner degismez

@@ -55,8 +55,10 @@ public class AvrasyaServiceWorkItemHandlerTest {
         server.stop(0);
     }
 
+    private final Map<String, String> extra = new HashMap<>();
+
     private AvrasyaServiceWorkItemHandler handler() {
-        Map<String, String> cfg = new HashMap<>();
+        Map<String, String> cfg = new HashMap<>(extra);
         cfg.put("avrasya.service.base-url", "http://127.0.0.1:" + server.getAddress().getPort() + "/avrasya");
         cfg.put("avrasya.service.auth-header", "Bearer test");
         return new AvrasyaServiceWorkItemHandler(new AvrasyaServiceConfig(cfg::get));
@@ -88,13 +90,19 @@ public class AvrasyaServiceWorkItemHandlerTest {
     }
 
     private Map<String, Object> run(Box box) {
+        return run(box, true);
+    }
+
+    private Map<String, Object> run(Box box, boolean mustComplete) {
         Map<String, Object> params = new HashMap<>();
         params.put("ProgramID", "116093");
         params.put("ActivityName", "Referans Process Aciklama Ekle");
         params.put("Data", box);
         AtomicReference<Map<String, Object>> results = new AtomicReference<>();
         handler().executeWorkItem(workItem(params), manager(results));
-        assertNotNull("work item tamamlanmali", results.get());
+        if (mustComplete) {
+            assertNotNull("work item tamamlanmali", results.get());
+        }
         return results.get();
     }
 
@@ -138,6 +146,21 @@ public class AvrasyaServiceWorkItemHandlerTest {
         AtomicReference<Map<String, Object>> results = new AtomicReference<>();
         new AvrasyaServiceWorkItemHandler(empty).executeWorkItem(workItem(params), manager(results));
         assertTrue(((String) results.get().get("ServiceError")).contains("999"));
+    }
+
+    @Test
+    public void http202MainframeAsenkron_WorkItemAcikKalir() {
+        status = 202;
+        reply = "";
+        extra.put("avrasya.service.callback-url", "http://bpm:8090/api/avrasya/geri-donus");
+        assertNull("asenkron kabulde work item tamamlanmamali", run(new Box(), false));
+        assertTrue(lastBody.get().contains("\"callbackUrl\":\"http://bpm:8090/api/avrasya/geri-donus/42/7\""));
+    }
+
+    @Test
+    public void asyncModAyariIle200deDeBekler() {
+        extra.put("avrasya.service.program.116093.mode", "async");
+        assertNull(run(new Box(), false));
     }
 
     @Test

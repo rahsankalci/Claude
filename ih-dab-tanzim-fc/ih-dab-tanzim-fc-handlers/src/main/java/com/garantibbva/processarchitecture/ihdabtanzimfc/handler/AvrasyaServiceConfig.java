@@ -17,6 +17,13 @@ import java.util.function.Function;
  * <p>Diger ayarlar:
  * <ul>
  *   <li>{@code avrasya.service.timeout-ms} / {@code AVRASYA_SERVICE_TIMEOUT_MS} (varsayilan 30000)</li>
+ *   <li>{@code avrasya.service.program.<ProgramID>.mode} = {@code sync} (varsayilan) | {@code async}:
+ *       async programda (orn. mainframe'e gidip BPM'e geri donen WebClient) servis istegi kabul
+ *       eder, work item ACIK kalir; sonuc geri donus ucuna ({@code callback-url}) gelince tamamlanir.
+ *       Servis {@code 202 Accepted} donerse mod ayari olmasa da async kabul edilir.</li>
+ *   <li>{@code avrasya.service.callback-url} / {@code AVRASYA_SERVICE_CALLBACK_URL}: BPM geri donus
+ *       ucunun koku (orn. {@code http://ih-dab-tanzim-fc-service:8090/api/avrasya/geri-donus});
+ *       istege {@code callbackUrl = <kok>/<processInstanceId>/<workItemId>} olarak eklenir.</li>
  *   <li>{@code avrasya.service.auth-header} / {@code AVRASYA_SERVICE_AUTH_HEADER}:
  *       verilirse {@code Authorization} basligi olarak gonderilir (orn. "Bearer xyz").
  *       Degeri OpenShift Secret'tan ortam degiskeni olarak verin, koda/properties'e yazmayin.</li>
@@ -65,6 +72,14 @@ public class AvrasyaServiceConfig {
     public Duration timeout() {
         String v = lookup.apply(PREFIX + "timeout-ms");
         return Duration.ofMillis(v == null ? 30_000L : Long.parseLong(v));
+    }
+
+    public boolean isAsync(String programId) {
+        return "async".equalsIgnoreCase(lookup.apply(PREFIX + "program." + programId + ".mode"));
+    }
+
+    public String callbackUrl() {
+        return lookup.apply(PREFIX + "callback-url");
     }
 
     public String authHeader() {
