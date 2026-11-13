@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd http://www.omg.org/spec/DD/20100524/DC DC.xsd http://www.omg.org/spec/DD/20100524/DI DI.xsd " id="_EBR_BASIC_TEST" exporter="jBPM Process Modeler" exporterVersion="2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:itemDefinition id="_gkAllItem" structureRef="com.garantibbva.processarchitecture.ebrbasictest.model.GkAll"/>
+  <bpmn2:itemDefinition id="_StringItem" structureRef="String"/>
+  <bpmn2:process id="EBR_BASIC_TEST" drools:packageName="com.garantibbva.processarchitecture.ebrbasictest" drools:version="1.0" drools:adHoc="false" name="EBR_BASIC_TEST" isExecutable="true" processType="Public">
+    <bpmn2:documentation><![CDATA[Avrasya EBR_BASIC_TEST (ACLID 11566, CategoryID 50001, konteyner 52249 sGK_sALL). Start -> Referans Process Aciklama Ekle -> WebClient (mainframe'e gider, BPM'e geri doner) -> End.]]></bpmn2:documentation>
+    <bpmn2:extensionElements>
+      <drools:import name="com.garantibbva.processarchitecture.ebrbasictest.model.GkAll"/>
+      <drools:import name="com.garantibbva.processarchitecture.ebrbasictest.surec.Surec"/>
+    </bpmn2:extensionElements>
+    <bpmn2:property id="gkAll" itemSubjectRef="_gkAllItem" name="gkAll"/>
+    <bpmn2:property id="serviceError" itemSubjectRef="_StringItem" name="serviceError"/>
+    <bpmn2:property id="uHataKarar" itemSubjectRef="_StringItem" name="uHataKarar"/>
+    <bpmn2:startEvent id="Start" name="Start">
+      <bpmn2:outgoing>F15_Start_ReferansProcessAciklamaEkle_Giris</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:exclusiveGateway id="ReferansProcessAciklamaEkle_Giris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F7_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Giris</bpmn2:incoming>
+      <bpmn2:incoming>F15_Start_ReferansProcessAciklamaEkle_Giris</bpmn2:incoming>
+      <bpmn2:outgoing>F1_ReferansProcessAciklamaEkle_Giris_ReferansProcessAciklamaEkle</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="ReferansProcessAciklamaEkle" drools:taskName="AvrasyaService" name="Referans Process Aciklama Ekle">
+      <bpmn2:documentation><![CDATA[Referans sistemine processin yaratildigina dair aciklama ekler. Avrasya ActivityIndex 103411306, ProgramID 54866. EndCondition: sGK_sWIP/status_code = "0". Hata: WorkQueue 585.]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Referans Process Aciklama Ekle]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[GkAll e = ((GkAll) kcontext.getVariable("gkAll")).ensureInitialized();
+Surec.servisOncesi(e);
+kcontext.setVariable("gkAll", e);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F1_ReferansProcessAciklamaEkle_Giris_ReferansProcessAciklamaEkle</bpmn2:incoming>
+      <bpmn2:outgoing>F2_ReferansProcessAciklamaEkle_ReferansProcessAciklamaEkle_Kontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_ActivityNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ActivityName"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_DataInputX" drools:dtype="com.garantibbva.processarchitecture.ebrbasictest.model.GkAll" itemSubjectRef="_gkAllItem" name="Data"/>
+        <bpmn2:dataOutput id="ReferansProcessAciklamaEkle_DataOutputX" drools:dtype="com.garantibbva.processarchitecture.ebrbasictest.model.GkAll" itemSubjectRef="_gkAllItem" name="Data"/>
+        <bpmn2:dataOutput id="ReferansProcessAciklamaEkle_ServiceErrorOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_ActivityNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_DataInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>ReferansProcessAciklamaEkle_DataOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>ReferansProcessAciklamaEkle_ServiceErrorOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[AvrasyaService]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[54866]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_ActivityNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Referans Process Aciklama Ekle]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_ActivityNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>gkAll</bpmn2:sourceRef><bpmn2:targetRef>ReferansProcessAciklamaEkle_DataInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>ReferansProcessAciklamaEkle_DataOutputX</bpmn2:sourceRef><bpmn2:targetRef>gkAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>ReferansProcessAciklamaEkle_ServiceErrorOutputX</bpmn2:sourceRef><bpmn2:targetRef>serviceError</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="ReferansProcessAciklamaEkle_Kontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F4_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Hata">
+      <bpmn2:incoming>F2_ReferansProcessAciklamaEkle_ReferansProcessAciklamaEkle_Kontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F3_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F4_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Hata</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="ReferansProcessAciklamaEkle_Hata" name="Referans Process Aciklama Ekle - Hata Kuyrugu">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[Referans Process Aciklama Ekle - Hata Kuyrugu]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[kcontext.setVariable("uHataKarar", null);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F4_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Hata</bpmn2:incoming>
+      <bpmn2:outgoing>F5_ReferansProcessAciklamaEkle_Hata_ReferansProcessAciklamaEkle_HataKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_Hata_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_Hata_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_Hata_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_Hata_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_Hata_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_Hata_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_Hata_ServiceErrorInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:dataInput id="ReferansProcessAciklamaEkle_Hata_gkAllInputX" drools:dtype="com.garantibbva.processarchitecture.ebrbasictest.model.GkAll" itemSubjectRef="_gkAllItem" name="gkAll"/>
+        <bpmn2:dataOutput id="ReferansProcessAciklamaEkle_Hata_kararOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="karar"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_Hata_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_Hata_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_Hata_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_Hata_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_Hata_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_Hata_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_Hata_ServiceErrorInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>ReferansProcessAciklamaEkle_Hata_gkAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>ReferansProcessAciklamaEkle_Hata_kararOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_Hata_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[HataKuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_Hata_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_Hata_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Referans Process Aciklama Ekle - Hata Kuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_Hata_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_Hata_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_585]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_Hata_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_Hata_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_Hata_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_Hata_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Otomatik aktivite bitis kosulu saglanamadi: Referans Process Aciklama Ekle]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_Hata_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>ReferansProcessAciklamaEkle_Hata_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[54866]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[ReferansProcessAciklamaEkle_Hata_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>serviceError</bpmn2:sourceRef><bpmn2:targetRef>ReferansProcessAciklamaEkle_Hata_ServiceErrorInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>gkAll</bpmn2:sourceRef><bpmn2:targetRef>ReferansProcessAciklamaEkle_Hata_gkAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>ReferansProcessAciklamaEkle_Hata_kararOutputX</bpmn2:sourceRef><bpmn2:targetRef>uHataKarar</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="ReferansProcessAciklamaEkle_HataKarar" name="Karar" gatewayDirection="Diverging" default="F7_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Giris">
+      <bpmn2:incoming>F5_ReferansProcessAciklamaEkle_Hata_ReferansProcessAciklamaEkle_HataKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F6_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F7_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="ReferansProcessAciklamaEkle_Cikis" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F3_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Cikis</bpmn2:incoming>
+      <bpmn2:incoming>F6_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Cikis</bpmn2:incoming>
+      <bpmn2:outgoing>F16_ReferansProcessAciklamaEkle_Cikis_WebClient_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="WebClient_Giris" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F14_WebClient_HataKarar_WebClient_Giris</bpmn2:incoming>
+      <bpmn2:incoming>F16_ReferansProcessAciklamaEkle_Cikis_WebClient_Giris</bpmn2:incoming>
+      <bpmn2:outgoing>F8_WebClient_Giris_WebClient</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="WebClient" drools:taskName="AvrasyaService" name="WebClient">
+      <bpmn2:documentation><![CDATA[Mainframe'e gider, sonuc BPM'e geri doner (asenkron: avrasya.service.program.269812.mode=async). Avrasya ActivityIndex 152531269, ProgramID 269812. EndCondition: TRUE. Hata: WorkQueue 1131.]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[WebClient]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[GkAll e = ((GkAll) kcontext.getVariable("gkAll")).ensureInitialized();
+Surec.servisOncesi(e);
+kcontext.setVariable("gkAll", e);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F8_WebClient_Giris_WebClient</bpmn2:incoming>
+      <bpmn2:outgoing>F9_WebClient_WebClient_Kontrol</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="WebClient_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="WebClient_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="WebClient_ActivityNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ActivityName"/>
+        <bpmn2:dataInput id="WebClient_DataInputX" drools:dtype="com.garantibbva.processarchitecture.ebrbasictest.model.GkAll" itemSubjectRef="_gkAllItem" name="Data"/>
+        <bpmn2:dataOutput id="WebClient_DataOutputX" drools:dtype="com.garantibbva.processarchitecture.ebrbasictest.model.GkAll" itemSubjectRef="_gkAllItem" name="Data"/>
+        <bpmn2:dataOutput id="WebClient_ServiceErrorOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>WebClient_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_ActivityNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_DataInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>WebClient_DataOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>WebClient_ServiceErrorOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[AvrasyaService]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[269812]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_ActivityNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_ActivityNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>gkAll</bpmn2:sourceRef><bpmn2:targetRef>WebClient_DataInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WebClient_DataOutputX</bpmn2:sourceRef><bpmn2:targetRef>gkAll</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WebClient_ServiceErrorOutputX</bpmn2:sourceRef><bpmn2:targetRef>serviceError</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="WebClient_Kontrol" name="Bitis Kosulu" gatewayDirection="Diverging" default="F11_WebClient_Kontrol_WebClient_Hata">
+      <bpmn2:incoming>F9_WebClient_WebClient_Kontrol</bpmn2:incoming>
+      <bpmn2:outgoing>F10_WebClient_Kontrol_WebClient_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F11_WebClient_Kontrol_WebClient_Hata</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:userTask id="WebClient_Hata" name="WebClient - Hata Kuyrugu">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[WebClient - Hata Kuyrugu]]></drools:metaValue></drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java"><drools:script><![CDATA[kcontext.setVariable("uHataKarar", null);]]></drools:script></drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F11_WebClient_Kontrol_WebClient_Hata</bpmn2:incoming>
+      <bpmn2:outgoing>F12_WebClient_Hata_WebClient_HataKarar</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="WebClient_Hata_TaskNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="TaskName"/>
+        <bpmn2:dataInput id="WebClient_Hata_NodeNameInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="NodeName"/>
+        <bpmn2:dataInput id="WebClient_Hata_GroupIdInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="GroupId"/>
+        <bpmn2:dataInput id="WebClient_Hata_SkippableInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Skippable"/>
+        <bpmn2:dataInput id="WebClient_Hata_CommentInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="Comment"/>
+        <bpmn2:dataInput id="WebClient_Hata_ProgramIDInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ProgramID"/>
+        <bpmn2:dataInput id="WebClient_Hata_ServiceErrorInputX" drools:dtype="String" itemSubjectRef="_StringItem" name="ServiceError"/>
+        <bpmn2:dataInput id="WebClient_Hata_gkAllInputX" drools:dtype="com.garantibbva.processarchitecture.ebrbasictest.model.GkAll" itemSubjectRef="_gkAllItem" name="gkAll"/>
+        <bpmn2:dataOutput id="WebClient_Hata_kararOutputX" drools:dtype="String" itemSubjectRef="_StringItem" name="karar"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>WebClient_Hata_TaskNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_Hata_NodeNameInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_Hata_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_Hata_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_Hata_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_Hata_ProgramIDInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_Hata_ServiceErrorInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>WebClient_Hata_gkAllInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>WebClient_Hata_kararOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_Hata_TaskNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[HataKuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_Hata_TaskNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_Hata_NodeNameInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient - Hata Kuyrugu]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_Hata_NodeNameInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_Hata_GroupIdInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[WQ_1131]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_Hata_GroupIdInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_Hata_SkippableInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[false]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_Hata_SkippableInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_Hata_CommentInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[Otomatik aktivite bitis kosulu saglanamadi: WebClient]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_Hata_CommentInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:targetRef>WebClient_Hata_ProgramIDInputX</bpmn2:targetRef><bpmn2:assignment><bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[269812]]></bpmn2:from><bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[WebClient_Hata_ProgramIDInputX]]></bpmn2:to></bpmn2:assignment></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>serviceError</bpmn2:sourceRef><bpmn2:targetRef>WebClient_Hata_ServiceErrorInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation><bpmn2:sourceRef>gkAll</bpmn2:sourceRef><bpmn2:targetRef>WebClient_Hata_gkAllInputX</bpmn2:targetRef></bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation><bpmn2:sourceRef>WebClient_Hata_kararOutputX</bpmn2:sourceRef><bpmn2:targetRef>uHataKarar</bpmn2:targetRef></bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:exclusiveGateway id="WebClient_HataKarar" name="Karar" gatewayDirection="Diverging" default="F14_WebClient_HataKarar_WebClient_Giris">
+      <bpmn2:incoming>F12_WebClient_Hata_WebClient_HataKarar</bpmn2:incoming>
+      <bpmn2:outgoing>F13_WebClient_HataKarar_WebClient_Cikis</bpmn2:outgoing>
+      <bpmn2:outgoing>F14_WebClient_HataKarar_WebClient_Giris</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="WebClient_Cikis" name="" gatewayDirection="Converging">
+      <bpmn2:incoming>F10_WebClient_Kontrol_WebClient_Cikis</bpmn2:incoming>
+      <bpmn2:incoming>F13_WebClient_HataKarar_WebClient_Cikis</bpmn2:incoming>
+      <bpmn2:outgoing>F17_WebClient_Cikis_End</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:endEvent id="End" name="End">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname"><drools:metaValue><![CDATA[End]]></drools:metaValue></drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>F17_WebClient_Cikis_End</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="F1_ReferansProcessAciklamaEkle_Giris_ReferansProcessAciklamaEkle" sourceRef="ReferansProcessAciklamaEkle_Giris" targetRef="ReferansProcessAciklamaEkle"/>
+    <bpmn2:sequenceFlow id="F2_ReferansProcessAciklamaEkle_ReferansProcessAciklamaEkle_Kontrol" sourceRef="ReferansProcessAciklamaEkle" targetRef="ReferansProcessAciklamaEkle_Kontrol"/>
+    <bpmn2:sequenceFlow id="F3_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Cikis" sourceRef="ReferansProcessAciklamaEkle_Kontrol" targetRef="ReferansProcessAciklamaEkle_Cikis" name="Basarili">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Basarili]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.statusCodeSifir(((GkAll) kcontext.getVariable("gkAll")), (String) kcontext.getVariable("serviceError"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F4_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Hata" sourceRef="ReferansProcessAciklamaEkle_Kontrol" targetRef="ReferansProcessAciklamaEkle_Hata" name="Hata"/>
+    <bpmn2:sequenceFlow id="F5_ReferansProcessAciklamaEkle_Hata_ReferansProcessAciklamaEkle_HataKarar" sourceRef="ReferansProcessAciklamaEkle_Hata" targetRef="ReferansProcessAciklamaEkle_HataKarar"/>
+    <bpmn2:sequenceFlow id="F6_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Cikis" sourceRef="ReferansProcessAciklamaEkle_HataKarar" targetRef="ReferansProcessAciklamaEkle_Cikis" name="Atla">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Atla]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.hataAtla((String) kcontext.getVariable("uHataKarar"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F7_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Giris" sourceRef="ReferansProcessAciklamaEkle_HataKarar" targetRef="ReferansProcessAciklamaEkle_Giris" name="Tekrar Dene"/>
+    <bpmn2:sequenceFlow id="F8_WebClient_Giris_WebClient" sourceRef="WebClient_Giris" targetRef="WebClient"/>
+    <bpmn2:sequenceFlow id="F9_WebClient_WebClient_Kontrol" sourceRef="WebClient" targetRef="WebClient_Kontrol"/>
+    <bpmn2:sequenceFlow id="F10_WebClient_Kontrol_WebClient_Cikis" sourceRef="WebClient_Kontrol" targetRef="WebClient_Cikis" name="Basarili">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Basarili]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.teknikHataYok(((GkAll) kcontext.getVariable("gkAll")), (String) kcontext.getVariable("serviceError"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F11_WebClient_Kontrol_WebClient_Hata" sourceRef="WebClient_Kontrol" targetRef="WebClient_Hata" name="Hata"/>
+    <bpmn2:sequenceFlow id="F12_WebClient_Hata_WebClient_HataKarar" sourceRef="WebClient_Hata" targetRef="WebClient_HataKarar"/>
+    <bpmn2:sequenceFlow id="F13_WebClient_HataKarar_WebClient_Cikis" sourceRef="WebClient_HataKarar" targetRef="WebClient_Cikis" name="Atla">
+      <bpmn2:extensionElements><drools:metaData name="elementname"><drools:metaValue><![CDATA[Atla]]></drools:metaValue></drools:metaData></bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return Surec.hataAtla((String) kcontext.getVariable("uHataKarar"));]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="F14_WebClient_HataKarar_WebClient_Giris" sourceRef="WebClient_HataKarar" targetRef="WebClient_Giris" name="Tekrar Dene"/>
+    <bpmn2:sequenceFlow id="F15_Start_ReferansProcessAciklamaEkle_Giris" sourceRef="Start" targetRef="ReferansProcessAciklamaEkle_Giris"/>
+    <bpmn2:sequenceFlow id="F16_ReferansProcessAciklamaEkle_Cikis_WebClient_Giris" sourceRef="ReferansProcessAciklamaEkle_Cikis" targetRef="WebClient_Giris"/>
+    <bpmn2:sequenceFlow id="F17_WebClient_Cikis_End" sourceRef="WebClient_Cikis" targetRef="End"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="diagram_EBR_BASIC_TEST">
+    <bpmndi:BPMNPlane id="plane_EBR_BASIC_TEST" bpmnElement="EBR_BASIC_TEST">
+      <bpmndi:BPMNShape id="shape_Start" bpmnElement="Start"><dc:Bounds height="56" width="56" x="32" y="172"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ReferansProcessAciklamaEkle_Giris" bpmnElement="ReferansProcessAciklamaEkle_Giris"><dc:Bounds height="56" width="56" x="132" y="172"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ReferansProcessAciklamaEkle" bpmnElement="ReferansProcessAciklamaEkle"><dc:Bounds height="102" width="154" x="213" y="149"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ReferansProcessAciklamaEkle_Kontrol" bpmnElement="ReferansProcessAciklamaEkle_Kontrol"><dc:Bounds height="56" width="56" x="402" y="172"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ReferansProcessAciklamaEkle_Hata" bpmnElement="ReferansProcessAciklamaEkle_Hata"><dc:Bounds height="102" width="154" x="353" y="314"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ReferansProcessAciklamaEkle_HataKarar" bpmnElement="ReferansProcessAciklamaEkle_HataKarar"><dc:Bounds height="56" width="56" x="532" y="337"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_ReferansProcessAciklamaEkle_Cikis" bpmnElement="ReferansProcessAciklamaEkle_Cikis"><dc:Bounds height="56" width="56" x="532" y="172"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WebClient_Giris" bpmnElement="WebClient_Giris"><dc:Bounds height="56" width="56" x="592" y="172"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WebClient" bpmnElement="WebClient"><dc:Bounds height="102" width="154" x="673" y="149"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WebClient_Kontrol" bpmnElement="WebClient_Kontrol"><dc:Bounds height="56" width="56" x="862" y="172"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WebClient_Hata" bpmnElement="WebClient_Hata"><dc:Bounds height="102" width="154" x="813" y="314"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WebClient_HataKarar" bpmnElement="WebClient_HataKarar"><dc:Bounds height="56" width="56" x="992" y="337"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_WebClient_Cikis" bpmnElement="WebClient_Cikis"><dc:Bounds height="56" width="56" x="992" y="172"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_End" bpmnElement="End"><dc:Bounds height="56" width="56" x="1072" y="172"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_F1_ReferansProcessAciklamaEkle_Giris_ReferansProcessAciklamaEkle" bpmnElement="F1_ReferansProcessAciklamaEkle_Giris_ReferansProcessAciklamaEkle"><di:waypoint x="188" y="200"/><di:waypoint x="213" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F2_ReferansProcessAciklamaEkle_ReferansProcessAciklamaEkle_Kontrol" bpmnElement="F2_ReferansProcessAciklamaEkle_ReferansProcessAciklamaEkle_Kontrol"><di:waypoint x="367" y="200"/><di:waypoint x="402" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F3_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Cikis" bpmnElement="F3_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Cikis"><di:waypoint x="458" y="200"/><di:waypoint x="532" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F4_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Hata" bpmnElement="F4_ReferansProcessAciklamaEkle_Kontrol_ReferansProcessAciklamaEkle_Hata"><di:waypoint x="430" y="228"/><di:waypoint x="430" y="314"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F5_ReferansProcessAciklamaEkle_Hata_ReferansProcessAciklamaEkle_HataKarar" bpmnElement="F5_ReferansProcessAciklamaEkle_Hata_ReferansProcessAciklamaEkle_HataKarar"><di:waypoint x="507" y="365"/><di:waypoint x="532" y="365"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F6_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Cikis" bpmnElement="F6_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Cikis"><di:waypoint x="560" y="337"/><di:waypoint x="560" y="228"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F7_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Giris" bpmnElement="F7_ReferansProcessAciklamaEkle_HataKarar_ReferansProcessAciklamaEkle_Giris"><di:waypoint x="560" y="393"/><di:waypoint x="560" y="423"/><di:waypoint x="160" y="423"/><di:waypoint x="160" y="228"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F8_WebClient_Giris_WebClient" bpmnElement="F8_WebClient_Giris_WebClient"><di:waypoint x="648" y="200"/><di:waypoint x="673" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F9_WebClient_WebClient_Kontrol" bpmnElement="F9_WebClient_WebClient_Kontrol"><di:waypoint x="827" y="200"/><di:waypoint x="862" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F10_WebClient_Kontrol_WebClient_Cikis" bpmnElement="F10_WebClient_Kontrol_WebClient_Cikis"><di:waypoint x="918" y="200"/><di:waypoint x="992" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F11_WebClient_Kontrol_WebClient_Hata" bpmnElement="F11_WebClient_Kontrol_WebClient_Hata"><di:waypoint x="890" y="228"/><di:waypoint x="890" y="314"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F12_WebClient_Hata_WebClient_HataKarar" bpmnElement="F12_WebClient_Hata_WebClient_HataKarar"><di:waypoint x="967" y="365"/><di:waypoint x="992" y="365"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F13_WebClient_HataKarar_WebClient_Cikis" bpmnElement="F13_WebClient_HataKarar_WebClient_Cikis"><di:waypoint x="1020" y="337"/><di:waypoint x="1020" y="228"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F14_WebClient_HataKarar_WebClient_Giris" bpmnElement="F14_WebClient_HataKarar_WebClient_Giris"><di:waypoint x="1020" y="393"/><di:waypoint x="1020" y="423"/><di:waypoint x="620" y="423"/><di:waypoint x="620" y="228"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F15_Start_ReferansProcessAciklamaEkle_Giris" bpmnElement="F15_Start_ReferansProcessAciklamaEkle_Giris"><di:waypoint x="88" y="200"/><di:waypoint x="132" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F16_ReferansProcessAciklamaEkle_Cikis_WebClient_Giris" bpmnElement="F16_ReferansProcessAciklamaEkle_Cikis_WebClient_Giris"><di:waypoint x="588" y="200"/><di:waypoint x="592" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_F17_WebClient_Cikis_End" bpmnElement="F17_WebClient_Cikis_End"><di:waypoint x="1048" y="200"/><di:waypoint x="1072" y="200"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship type="BPSimData"><bpmn2:extensionElements><bpsim:BPSimData><bpsim:Scenario id="default" name="Simulationscenario"><bpsim:ScenarioParameters/></bpsim:Scenario></bpsim:BPSimData></bpmn2:extensionElements><bpmn2:source>_EBR_BASIC_TEST</bpmn2:source><bpmn2:target>_EBR_BASIC_TEST</bpmn2:target></bpmn2:relationship>
+</bpmn2:definitions>

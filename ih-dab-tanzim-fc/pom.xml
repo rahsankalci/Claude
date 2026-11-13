@@ -23,6 +23,7 @@
   <modules>
     <module>ih-dab-tanzim-fc-handlers</module>
     <module>ih-dab-tanzim-fc-kjar</module>
+    <module>ebr-basic-test-kjar</module>
     
   </modules>
 
@@ -51,18 +52,24 @@
         </dependencies>
       </dependencyManagement>
     </profile>
-    <!-- Spring Boot KIE Server uygulamasi: mvn install -Pservice -->
+    <!-- Spring Boot uygulamalari (KIE Server + Mainframe Gateway): mvn install -Pservice -->
     <profile>
       <id>service</id>
       <modules>
         <module>ih-dab-tanzim-fc-service</module>
+        <module>avrasya-mainframe-gateway</module>
       </modules>
     </profile>
   </profiles>
 
   <properties>
     <kie.version>7.74.1.Final</kie.version>
-    <maven.compiler.release>11</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
+    <!--
+      Java 21: jBPM 7'nin varsayilan mvel2 2.4.x surumu JDK 21'de kaldirilan java.lang.Compiler'a
+      baglidir (NoClassDefFoundError). 2.5.x bu bagimliligi kaldirir ve API uyumludur.
+    -->
+    <mvel.version>2.5.2.Final</mvel.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- KIE 7.74 (kie-parent) ile ayni Jackson surumu; tum jackson modulleri BOM ile hizalanir -->
     <jackson.version>2.15.0</jackson.version>
@@ -95,6 +102,11 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>org.mvel</groupId>
+        <artifactId>mvel2</artifactId>
+        <version>${mvel.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>1.7.36</version>
@@ -119,6 +131,11 @@
         <artifactId>ih-dab-tanzim-fc-kjar</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.garantibbva.processarchitecture</groupId>
+        <artifactId>ebr-basic-test-kjar</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -139,6 +156,14 @@
           <groupId>org.kie</groupId>
           <artifactId>kie-maven-plugin</artifactId>
           <version>${kie.version}</version>
+          <dependencies>
+            <!-- plugin de JDK 21'de calissin diye -->
+            <dependency>
+              <groupId>org.mvel</groupId>
+              <artifactId>mvel2</artifactId>
+              <version>${mvel.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>

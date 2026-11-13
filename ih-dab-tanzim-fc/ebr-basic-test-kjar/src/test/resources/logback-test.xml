@@ -1,0 +1,10 @@
+<configuration>
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder><pattern>%d{HH:mm:ss.SSS} %-5level %logger{30} - %msg%n</pattern></encoder>
+  </appender>
+  <logger name="org.hibernate" level="WARN"/>
+  <logger name="org.jbpm" level="WARN"/>
+  <logger name="org.drools" level="WARN"/>
+  <logger name="com.arjuna" level="WARN"/>
+  <root level="INFO"><appender-ref ref="CONSOLE"/></root>
+</configuration>
