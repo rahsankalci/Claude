@@ -1,0 +1,26 @@
+<idea-plugin>
+  <id>com.garantibbva.processarchitecture.avrasya-bpm-converter</id>
+  <name>Avrasya to BAMOE BPM Converter</name>
+  <vendor>Garanti BBVA - Process Architecture</vendor>
+  <description><![CDATA[
+    Oracle Workflow (Avrasya) workflow XML dosyasini BAMOE 8 / jBPM BPMN projesine (kjar + service) donusturur.
+    XML'e sag tik &rarr; <b>Convert Avrasya Workflow to BAMOE BPM</b>.
+  ]]></description>
+
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <notificationGroup id="Avrasya BPM Converter" displayType="BALLOON"/>
+  </extensions>
+
+  <actions>
+    <action id="AvrasyaBpm.Convert"
+            class="com.garantibbva.processarchitecture.converter.intellij.ConvertAvrasyaAction"
+            text="Convert Avrasya Workflow to BAMOE BPM..."
+            description="Avrasya workflow XML dosyasindan BAMOE BPM projesi (kjar + service) uretir">
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+      <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+      <add-to-group group-id="ToolsMenu" anchor="last"/>
+    </action>
+  </actions>
+</idea-plugin>
