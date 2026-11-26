@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.garantibbva.processarchitecture.tools</groupId>
+    <artifactId>avrasya-bpm-converter</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>converter-desktop</artifactId>
+  <name>Converter :: Desktop (Swing)</name>
+  <description>XML yukle -> Convert -> kjar + service projesi uret. Calistir: java -jar converter-desktop-*-all.jar</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.garantibbva.processarchitecture.tools</groupId>
+      <artifactId>converter-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>avrasya-bpm-converter</finalName>
+    <plugins>
+      <!-- converter-core ile birlikte tek calistirilabilir jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>shade</goal></goals>
+            <configuration>
+              <shadedArtifactAttached>false</shadedArtifactAttached>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.garantibbva.processarchitecture.converter.ui.ConverterApp</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
